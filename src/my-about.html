@@ -1,0 +1,26 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-about">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+
+    <div class="card">
+      <h1>About</h1>
+      <p>Shop Heroes Central is a Web Application for Shop Heroes. 
+        You will find data about items, workers, buildings, etc, and many tools to make your life easier.<br>
+        Currently in development.</p>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-about'
+    });
+  </script>
+</dom-module>

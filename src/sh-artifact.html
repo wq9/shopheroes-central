@@ -1,0 +1,56 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="sh-artifact">
+  <template>
+    <style include="shared-styles iron-flex iron-flex-alignment">
+      :host {
+        display: block;
+      }
+
+      .ressource{
+        height: 32px;
+        line-height: 2;
+        min-width: 48px;
+        margin: 1px 4px;
+        background-position: 100% 50%;
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+
+      .qty{
+        color: white;
+        font-weight: bold;
+        text-align: left;
+        padding-left: 4px;
+        text-shadow:
+          -1px -1px 1px #000,
+           1px -1px 1px #000,
+          -1px 1px 1px #000,
+           1px 1px 1px #000;
+      }
+    </style>
+
+    <template is="dom-repeat" items="{{artifacts}}">
+        <div class="ressource" style$="{{getStyle(item.name)}}">
+          <div class="qty">{{item.qty}}</div>
+          <paper-tooltip position="top" offset="2">{{item.qty}} {{item.name}}</paper-tooltip>
+        </div>
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'sh-artifact',
+      properties: {
+        artifacts: {
+          type: Array
+        },
+      },
+      getStyle: function(i){
+        var n = i.toLowerCase().replace(/'| /gi, "")
+        return "background-image: url('https://cdn.rawgit.com/ShopHeroesData/datahub-shopheroes/master/src/assets/ArtifactImages/"+n+".png');";
+      }
+    });
+  </script>
+</dom-module>

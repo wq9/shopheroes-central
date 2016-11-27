@@ -1,0 +1,75 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="sh-precraft">
+  <template>
+    <style include="shared-styles iron-flex iron-flex-alignment">
+      :host {
+        display: block;
+      }
+
+      .ressource{
+        height: 32px;
+        line-height: 2;
+        min-width: 48px;
+        margin: 1px 4px;
+        background-position: 100% 50%;
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+
+      .qty{
+        color: white;
+        font-weight: bold;
+        text-align: left;
+        padding-left: 4px;
+        text-shadow:
+          -1px -1px 1px #000,
+           1px -1px 1px #000,
+          -1px 1px 1px #000,
+           1px 1px 1px #000;
+      }
+    </style>
+
+    <template is="dom-repeat" items="{{precrafts}}">
+        <div class="ressource" style$="{{getStyle(item)}}">
+          <div class="qty" style="{{getColor(item)}}">{{item.qty}}</div>
+          <paper-tooltip position="top" offset="2">{{formatName(item)}}</paper-tooltip>
+        </div>
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'sh-precraft',
+      properties: {
+        precrafts: {
+          type: Array
+        },
+      },
+      getStyle: function(i){
+        var n = i.name.toLowerCase().replace(/'| /gi, "")
+        return "background-image: url('http://sols9.com/shopheroes/assets/ItemImages/?n="+n+"');";
+      },
+      getColor: function(i){
+        switch (i.quality) {
+          case "Common":
+            return "color: white;";
+          case "Good":
+            return "color: #30DA61;";
+          case "Great":
+            return "color: #3F69F6;";
+          case "Flawless":
+            return "color: #3CCAF3;";
+          default:
+            return "color: white;";
+        }
+      },
+      formatName: function(i){
+        var n = i.qty;
+        if(i.quality != "Common") n += " "+i.quality;
+        return n+" "+i.name;
+      }
+    });
+  </script>
+</dom-module>

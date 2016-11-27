@@ -1,0 +1,277 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-items">
+  <template>
+    <style include="shared-styles iron-flex iron-flex-alignment">
+      :host {
+        display: block;
+        height: 100%;
+      }
+      .item{
+        height: 40px;
+        padding: 0 16px;
+        border-bottom: 1px solid rgba(0,0,0,0.07);
+        border-left: 1px solid rgba(0,0,0,0.07);
+        border-right: 1px solid rgba(0,0,0,0.07);
+      }
+      .item:hover{
+        background-color: rgba(0,0,0,0.02);
+      }
+      .item>div{
+        flex: 0 0 auto;
+      }
+      .item img{
+        width: 32px;
+        height: 32px;
+      }
+
+      iron-list{
+        flex: 1 1 auto;
+        background-color: white;
+        width: 1190px;
+      }
+      .header{
+        flex: 0 0 auto;
+        background-color: white;
+        border: 1px solid rgba(0,0,0,0.07);
+        width: 1157px;
+        margin-top: 48px;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .level{
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        text-shadow:
+          -1px -1px 1px #000,
+           1px -1px 1px #000,
+          -1px 1px 1px #000,
+           1px 1px 1px #000;
+        width: 40px; 
+        height: 32px;
+        background-image: url('http://sols9.com/shopheroes/assets/icon/level_blue.png');
+        background-position: 50% 50%;
+        background-size: contain;
+        background-repeat: no-repeat;
+        line-height: 2;
+      }
+
+      .image{
+        width: 40px;
+        height: 32px;
+        background-position: 50% 50%;
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+      
+      .price{
+        width: 88px; 
+        text-align: right;
+        background-image: url('http://sols9.com/shopheroes/assets/icon/gold.png');
+        background-position: 100% 0;
+        background-size: contain;
+        background-repeat: no-repeat;
+        padding-right: 26px;
+      }
+
+      .small{
+        font-size: 12px;
+        color: rgba(0,0,0,0.57);
+      }
+
+      .power{
+        width: 56px;
+        text-align: right;
+        background-image: url('http://sols9.com/shopheroes/assets/icon/power.png');
+        background-position: 100% 0;
+        background-size: contain;
+        background-repeat: no-repeat;
+        padding-right: 26px;
+      }
+
+      .time{
+        width: 96px;
+        text-align: right;
+        background-image: url('http://sols9.com/shopheroes/assets/icon/time.png');
+        background-position: 100% 0;
+        background-size: contain;
+        background-repeat: no-repeat;
+        padding-right: 26px;
+      }
+    </style>
+
+    <iron-ajax auto url="/json/items.json" handle-as="json" 
+      debounce-duration="300" last-response="{{itemdata}}"></iron-ajax>
+
+      <div class="header item layout horizontal center">
+        <div style="width: 32px;"></div>
+        <div style="width: 40px;">LV</div>
+        <div style="width: 220px; text-align: left;">
+          <paper-input label="Search" value="{{query}}" style="height: 97px; width: 180px; margin: 0 0 0 40px;">
+            <paper-icon-button suffix icon="close" style="color: rgba(0,0,0,0.37);" on-tap="clearQuery"></paper-icon-button>
+          </paper-input>
+        </div>
+        <div style="width: 114px;">GOLD</div>
+        <div style="width: 104px;">EXP</div>
+        <div style="width: 82px;">POWER</div>
+        <div style="width: 122px;">CRAFT TIME</div>
+        <div style="width: 296px;">RESSOURCES</div>
+        <div style="width: 160px;"></div>
+      </div>
+      
+      <iron-list id="list" items="[[items]]" max-physical-count="100">
+        <template>
+          <div class="item layout horizontal center">
+            <div style="width: 32px; height: 32px;"><img src="{{assetUrl(item.class,'type')}}" alt="{{item.class}}"></div>
+            <div class="level">{{item.level}}</div>
+            <div class="image" style="{{getImageStyle(item)}}"></div>
+            <div style="width: 180px;">{{item.name}}</div>
+            <div class="price">{{formatNumber(item.gold)}}</div>
+            <div style="width: 104px; text-align: right;">{{formatNumber(item.exp)}} <span class="small">EXP</span></div>
+            <div class="power">{{formatNumber(item.power)}}</div>
+            <div class="time">{{formatCraftTime(item.skills,skills)}}</div>
+            <div style="width: 280px;">
+              <sh-ressource ressources="{{item.ressources}}"></sh-ressource>
+            </div>
+            <div style="width: 160px;" class="layout horizontal">
+              <template is="dom-if" if="{{!isEmpty(item.artifacts)}}">
+                <sh-artifact class="chip layout horizontal center" artifacts="{{item.artifacts}}"></sh-artifact>&nbsp;
+              </template>
+              <template is="dom-if" if="{{!isEmpty(item.precrafts)}}">
+                <sh-precraft class="chip layout horizontal center" precrafts="{{item.precrafts}}"></sh-precraft>
+              </template>
+            </div>
+          </div>
+        </template>
+      </iron-list>
+    
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-items',
+      properties: {
+        query: {
+          type: String,
+          value: "",
+          observer: "_queryChanged"
+        },
+        search: {
+          type: String,
+          value: "",
+          observer: "_filterChanged"
+        },
+        maxlv: {
+          type: Number,
+          value: 50
+        },
+        minlv: {
+          type: Number,
+          value: 0
+        },
+        skills: {
+          type: Array,
+          value: function() {
+            return [100,100,100,100,100,100,100,100,100,100,100];
+          }
+        },
+        itemdata: {
+          type: Array,
+          value: function() {
+            return [];
+          },
+          observer: "_filterChanged"
+        }
+      },
+      _queryChanged: function(){
+        this.debounce('queryChanged', function() {
+          this.set('search', this.query.trim());
+        }, 300);
+      },
+      _filterChanged: function(){
+        if(this.itemdata==undefined) return;
+        this.set('items', this.filterItems(this.itemdata, this.search, this.minlv, this.maxlv));
+        //console.log('_filterChanged', this.items.length, this.$.list._physicalCount);
+      },
+      filterItems: function(items,q,l1,l2){
+        return items.filter(function (item) {
+          if(item.level < l1) return false;
+          if(item.level > l2) return false;
+
+          if(q.length>2){
+            var re = new RegExp(q, 'i');
+            if(!re.test(item.name)) return false;
+          }
+          return true;
+        });
+      },
+      clearQuery: function(){
+        this.set('query', "");
+      },
+      assetUrl: function(i,t){
+        switch (t) {
+          case "type":
+            return "https://cdn.rawgit.com/ShopHeroesData/datahub-shopheroes/master/src/assets/ItemIcons/"+i+".png";
+          case "":
+            return "";
+          default:
+            return "";
+        }
+      },
+      getImageStyle: function(i){
+        return "background-image: url('http://sols9.com/shopheroes/assets/ItemImages/?n="+i.id+"');";
+      },
+      formatNumber: function(n){
+        return n.toLocaleString();
+      },
+      getCraftTime: function(item,setting){
+        var m = 0;
+        for(i in item){
+          if(item[i] > 0){
+            if(setting[i]>0){
+              m += item[i]/setting[i];
+            }else{
+              return 0;
+            }
+          }
+        }
+        return Math.ceil(m*60);
+      },
+      formatTime: function(sec){
+        sec = parseInt(sec, 10);
+        if(sec<=0) return "-";
+
+        var h   = Math.floor(sec / 3600);
+        var m = Math.floor((sec - (h * 3600)) / 60);
+        var s = sec - (h * 3600) - (m * 60);
+
+        var r="";
+        if(h>0){
+          if (m < 10) {m = "0"+m;}
+          if (s < 10) {s = "0"+s;}
+          return h+"h"+m+"m"+s+"s";
+        }
+        if(m>0){
+          if (s < 10) {s = "0"+s;}
+          return m+"m"+s+"s";
+        }
+        if(s>0){
+          return s+"s";
+        }
+        return "N/A";
+        //return h+"h"+m+"m"+s+"s";
+      },
+      formatCraftTime: function(item,setting){
+        var t = this.getCraftTime(item,setting);
+        return this.formatTime(t);
+      },
+      isEmpty: function(a){
+        return a.length==0;
+      }
+    });
+  </script>
+</dom-module>

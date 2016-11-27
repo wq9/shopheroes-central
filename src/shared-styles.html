@@ -1,0 +1,56 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<!-- shared styles for all views -->
+<dom-module id="shared-styles">
+  <template>
+    <style>
+      [hidden] { display: none !important; }
+
+      :host {
+        --app-primary-color: #4285f4;
+        --app-secondary-color: black;
+      }
+
+      paper-tabs{
+        --paper-tabs-selection-bar-color: white;
+      }
+      paper-tab[link] a {
+        @apply(--layout-horizontal);
+        @apply(--layout-center-center);
+        color: #fff;
+        text-decoration: none;
+        padding: 0 12px;
+      }
+      paper-tab.iron-selected{
+        font-weight: bold;
+      }
+      
+      paper-tooltip{
+        --paper-tooltip-background: rgba(0,0,0,0.9);
+        --paper-tooltip-opacity: 1;
+        z-index: 99;
+      }
+
+      .card {
+        margin: 24px;
+        padding: 16px;
+        color: #757575;
+        border-radius: 2px;
+        background-color: #fff;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      }
+
+      .chip{
+        background-color: rgba(0,0,0,0.07);
+        border-radius: 16px;
+        border: 1px solid rgba(0,0,0,0.07);
+      }
+
+      h1 {
+        margin: 16px 0;
+        color: #212121;
+        font-size: 22px;
+      }
+    </style>
+  </template>
+</dom-module>

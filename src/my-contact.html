@@ -1,0 +1,24 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-contact">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+
+    <div class="card">
+      <h1>Contact</h1>
+      <p>For comments, suggestions, or if you want to report errors, please contact me on <a href="http://www.reddit.com/message/compose/?to=orblit">reddit</a>.</p>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'my-contact'
+    });
+  </script>
+</dom-module>

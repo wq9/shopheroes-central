@@ -104,8 +104,8 @@
 
       #filterDialog{
         width: 80%;
-        min-width: 300px;
-        max-width: 800px;
+        min-width: 298px;
+        max-width: 698px;
       }
       #filterDialog>paper-dialog-scrollable{
         --paper-dialog-scrollable:{
@@ -116,17 +116,24 @@
         padding: 8px 24px;
         border-bottom: 1px solid rgba(0,0,0,0.07);
       }
+      .filter-line .subheader{
+        font-weight: bold;
+        color: rgba(0,0,0,0.54);
+      }
       .item-class{
-        width: 48px; height: 48px;
+        width: 44px; height: 44px;
         background-color: rgba(0,0,0,0.17);
         border: 1px solid rgba(0,0,0,0.17);
         cursor: pointer;
+        opacity: 0.37;
+        margin: 2px;
+        border-radius: 16px;
       }
       .item-class>img{
         width: 100%; height: 100%;
       }
       .item-class.iron-selected{
-        background-color: var(--app-primary-color);
+        opacity: 1;
       }
 
       #skillDialog{
@@ -157,22 +164,22 @@
       debounce-duration="300" last-response="{{itemdata}}" on-response="_filterChanged"></iron-ajax>
 
       <div class="header item layout horizontal center">
-        <div style="width: 32px;">
+        <div style="width: 72px;">
           <paper-icon-button icon="filter-list" on-tap="openFilterDialog"></paper-icon-button>
         </div>
-        <div style="width: 40px;">LV</div>
+        <!--<div style="width: 40px;">LV</div>-->
         <div style="width: 220px; text-align: left;">
           <paper-input label="Search" value="{{query}}" style="height: 97px; width: 180px; margin: 0 0 0 40px;">
             <paper-icon-button suffix icon="close" style="color: rgba(0,0,0,0.37);" on-tap="clearQuery"></paper-icon-button>
           </paper-input>
         </div>
-        <div style="width: 114px;">GOLD</div>
-        <div style="width: 104px;">EXP</div>
-        <div style="width: 82px;">POWER</div>
+        <div style="width: 114px;"></div>
+        <div style="width: 104px;"></div>
+        <div style="width: 82px;"></div>
         <div style="width: 122px;">TIME
           <paper-icon-button icon="settings" on-tap="openSkillDialog"></paper-icon-button>
         </div>
-        <div style="width: 296px;">RESSOURCES</div>
+        <div style="width: 296px;"></div>
         <div style="width: 160px;"></div>
       </div>
       
@@ -206,20 +213,20 @@
         <h2>Item Filters</h2>
         <paper-dialog-scrollable>
           <div class="filter-line" style="border-top: 1px solid rgba(0,0,0,0.07)">
-            <div style="margin-bottom: 26px;">Item Level</div>
+            <div class="subheader" style="margin: 8px 0 26px 0;">Item Level</div>
             <paper-range-slider always-show-pin pin step='1' min='1' max='50' 
             value-min='{{minlv}}' value-max='{{maxlv}}' style="width: 100%;"></paper-range-slider>
           </div>
 
           <div class="filter-line">
             <div style="height: 40px;">
-              <span>Item Class</span>
+              <span class="subheader">Item Class</span>
               <paper-button raised style="height: 28px;" on-tap="setClassesAll">Select All</paper-button>
-              <paper-button raised style="height: 28px;" on-tap="setClassesNone">Unselect All</paper-button>
+              <paper-button raised style="height: 28px;" on-tap="setClassesNone">Clear</paper-button>
             </div>
             <iron-selector attr-for-selected="name" multi selected-values="{{classes}}" class="layout horizontal wrap">
               <template is="dom-repeat" items="{{allclasses}}">
-                <div name="{{item}}" class="item-class">
+                <div name="{{item}}" class="item-class" style$="{{classStyle(item)}}" on-tap="classTap">
                   <img src="{{assetUrl(item,'type')}}" alt="{{item}}">
                   <paper-tooltip position="top" offset="2">{{item}}</paper-tooltip>
                 </div>
@@ -276,19 +283,25 @@
         classes: {
           type: Array,
           value: function() {
-            return ['Swords', 'Daggers', 'Axes', 'Spears', 'Maces', 'Staves', 'Bows', 'Guns', 
+            return ['Swords', 'Daggers', 'Axes', 'Spears',  
             'Armor', 'Vests', 'Helmets', 'Gauntlets', 'Boots', 
+            'Remedies', 'Potions',
+            'Rings', 'Pendants',
+            'Maces', 'Staves', 'Bows', 'Guns',
             'Clothes', 'Shields', 'Hats', 'Bracers', 'Footwear', 
-            'Remedies', 'Potions', 'Spells', 'Projectiles', 'Rings', 'Pendants', 'Instruments'];
+            'Spells', 'Projectiles', 'Instruments'];
           }
         },
         allclasses: {
           type: Array,
           value: function() {
-            return ['Swords', 'Daggers', 'Axes', 'Spears', 'Maces', 'Staves', 'Bows', 'Guns', 
+            return ['Swords', 'Daggers', 'Axes', 'Spears',  
             'Armor', 'Vests', 'Helmets', 'Gauntlets', 'Boots', 
+            'Remedies', 'Potions',
+            'Rings', 'Pendants',
+            'Maces', 'Staves', 'Bows', 'Guns',
             'Clothes', 'Shields', 'Hats', 'Bracers', 'Footwear', 
-            'Remedies', 'Potions', 'Spells', 'Projectiles', 'Rings', 'Pendants', 'Instruments'];
+            'Spells', 'Projectiles', 'Instruments'];
           }
         },
         skills: {
@@ -349,6 +362,40 @@
       },
       setClassesNone: function(){
         this.set('classes', []);
+      },
+      classTap: function(e){
+        console.log(e.model);
+        if(this.classes.length==25){
+          this.set('classes', [e.model.item]);
+          e.stopPropagation();
+        }else if(this.classes.length==1 && this.classes[0]==e.model.item){
+          this.setClassesAll();
+          e.stopPropagation();
+        }
+      },
+      classStyle: function(t){
+        switch (t) {
+          case "Swords":
+          case "Daggers":
+          case "Axes":
+          case "Spears":
+          case "Maces":
+          case "Staves":
+          case "Bows":
+          case "Guns":
+            return "background-color: rgba(202,49,49,1);";
+          case "Remedies":
+          case "Potions":
+          case "Spells":
+          case "Projectiles":
+            return "background-color: rgba(39,198,140,1);";
+          case "Rings":
+          case "Pendants":
+          case "Instruments":
+            return "background-color: rgba(255,211,93,1);";
+          default:
+            return "background-color: rgba(9,182,240,1);";
+        }
       },
       openSkillDialog: function(){
         this.$.skillDialog.open();

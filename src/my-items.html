@@ -106,7 +106,6 @@
         width: 80%;
         min-width: 300px;
         max-width: 800px;
-        
       }
       #filterDialog>paper-dialog-scrollable{
         --paper-dialog-scrollable:{
@@ -129,6 +128,29 @@
       .item-class.iron-selected{
         background-color: var(--app-primary-color);
       }
+
+      #skillDialog{
+        width: 80%;
+        min-width: 328px;
+        max-width: 888px;
+      }
+      .skill-class{
+        width: 64px;
+        height: 100%;
+        border: 1px solid rgba(0,0,0,0.07);
+        text-align: center;
+        overflow: hidden;
+        margin: 2px;
+      }
+      .skill-class>img{
+        width: 64px;;
+        height: 66px;
+        margin-bottom: -32px;
+      }
+      .skill-class>paper-input{
+        width: 48px;
+        margin: 0 auto;
+      }
     </style>
 
     <iron-ajax auto url="/json/items.json" handle-as="json" 
@@ -147,7 +169,9 @@
         <div style="width: 114px;">GOLD</div>
         <div style="width: 104px;">EXP</div>
         <div style="width: 82px;">POWER</div>
-        <div style="width: 122px;">CRAFT TIME</div>
+        <div style="width: 122px;">TIME
+          <paper-icon-button icon="settings" on-tap="openSkillDialog"></paper-icon-button>
+        </div>
         <div style="width: 296px;">RESSOURCES</div>
         <div style="width: 160px;"></div>
       </div>
@@ -162,7 +186,7 @@
             <div class="price">{{formatNumber(item.gold)}}</div>
             <div style="width: 104px; text-align: right;">{{formatNumber(item.exp)}} <span class="small">EXP</span></div>
             <div class="power">{{formatNumber(item.power)}}</div>
-            <div class="time">{{formatCraftTime(item.skills,skills)}}</div>
+            <div class="time">{{formatCraftTime(skills.*, item.skills)}}</div>
             <div style="width: 280px;">
               <sh-ressource ressources="{{item.ressources}}"></sh-ressource>
             </div>
@@ -177,7 +201,7 @@
           </div>
         </template>
       </iron-list>
-    
+      
       <paper-dialog id="filterDialog">
         <h2>Item Filters</h2>
         <paper-dialog-scrollable>
@@ -200,16 +224,31 @@
                   <paper-tooltip position="top" offset="2">{{item}}</paper-tooltip>
                 </div>
               </template>
-              
             </iron-selector>
           </div>
-          
         </paper-dialog-scrollable>
         <div class="buttons">
           <paper-button dialog-confirm autofocus on-tap="_filterChanged">OK</paper-button>
         </div>
       </paper-dialog>
 
+      <paper-dialog id="skillDialog">
+        <h2>Enter your skills to get the correct crafting time</h2>
+        <paper-dialog-scrollable>
+          <div class="layout horizontal wrap">
+          <template is="dom-repeat" items="{{skills}}">
+            <div name="{{item}}" class="skill-class layout vertical">
+              <img src="{{assetUrl(index,'skill')}}" alt="{{item}}">
+              <paper-input label="" allowed-pattern="[0-9]" value="{{item}}"></paper-input>
+              <paper-tooltip position="top" offset="2">{{getSkillName(index)}}</paper-tooltip>
+            </div>
+          </template>
+          </div>
+        </paper-dialog-scrollable>
+        <div class="buttons">
+          <paper-button dialog-confirm autofocus on-tap="_filterChanged">OK</paper-button>
+        </div>
+      </paper-dialog>
   </template>
 
   <script>
@@ -255,7 +294,15 @@
         skills: {
           type: Array,
           value: function() {
-            return [100,100,100,100,100,100,100,100,100,100,100];
+            return [100,100,100,100,100,100,100,100,100,100,100,100];
+          },
+          notify: true
+        },
+        skillName: {
+          type: Array,
+          value: function() {
+            return ['Metal Working', 'Wood Working', 'Textile Working', 'Alchemy', 'Magic', 
+            'Weapon Crafting', 'Armor Making', 'Arts and Crafts', 'Jewelry', 'Rune Writing', 'Tinkering', 'Mastery'];
           }
         },
         itemdata: {
@@ -303,12 +350,19 @@
       setClassesNone: function(){
         this.set('classes', []);
       },
+      openSkillDialog: function(){
+        this.$.skillDialog.open();
+      },
+      getSkillName: function(i){
+        return this.skillName[i];
+      },
       assetUrl: function(i,t){
         switch (t) {
           case "type":
             return "https://cdn.rawgit.com/ShopHeroesData/datahub-shopheroes/master/src/assets/ItemIcons/"+i+".png";
-          case "":
-            return "";
+          case "skill":
+            var n = this.skillName[i].toLowerCase().replace(/ /gi, "");
+            return "https://cdn.rawgit.com/ShopHeroesData/datahub-shopheroes/master/src/assets/SkillIcons/"+n+".png";
           default:
             return "";
         }
@@ -319,12 +373,12 @@
       formatNumber: function(n){
         return n.toLocaleString();
       },
-      getCraftTime: function(item,setting){
+      getCraftTime: function(change, item){
         var m = 0;
         for(i in item){
           if(item[i] > 0){
-            if(setting[i]>0){
-              m += item[i]/setting[i];
+            if(this.skills[i]>0){
+              m += item[i]/this.skills[i];
             }else{
               return 0;
             }

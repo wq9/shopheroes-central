@@ -101,13 +101,43 @@
         background-repeat: no-repeat;
         padding-right: 26px;
       }
+
+      #filterDialog{
+        width: 80%;
+        min-width: 300px;
+        max-width: 800px;
+        
+      }
+      #filterDialog>paper-dialog-scrollable{
+        --paper-dialog-scrollable:{
+          padding: 0;
+        };
+      }
+      .filter-line{
+        padding: 8px 24px;
+        border-bottom: 1px solid rgba(0,0,0,0.07);
+      }
+      .item-class{
+        width: 48px; height: 48px;
+        background-color: rgba(0,0,0,0.17);
+        border: 1px solid rgba(0,0,0,0.17);
+        cursor: pointer;
+      }
+      .item-class>img{
+        width: 100%; height: 100%;
+      }
+      .item-class.iron-selected{
+        background-color: var(--app-primary-color);
+      }
     </style>
 
     <iron-ajax auto url="/json/items.json" handle-as="json" 
-      debounce-duration="300" last-response="{{itemdata}}"></iron-ajax>
+      debounce-duration="300" last-response="{{itemdata}}" on-response="_filterChanged"></iron-ajax>
 
       <div class="header item layout horizontal center">
-        <div style="width: 32px;"></div>
+        <div style="width: 32px;">
+          <paper-icon-button icon="filter-list" on-tap="openFilterDialog"></paper-icon-button>
+        </div>
         <div style="width: 40px;">LV</div>
         <div style="width: 220px; text-align: left;">
           <paper-input label="Search" value="{{query}}" style="height: 97px; width: 180px; margin: 0 0 0 40px;">
@@ -148,6 +178,37 @@
         </template>
       </iron-list>
     
+      <paper-dialog id="filterDialog">
+        <h2>Item Filters</h2>
+        <paper-dialog-scrollable>
+          <div class="filter-line" style="border-top: 1px solid rgba(0,0,0,0.07)">
+            <div style="margin-bottom: 26px;">Item Level</div>
+            <paper-range-slider always-show-pin pin step='1' min='1' max='50' 
+            value-min='{{minlv}}' value-max='{{maxlv}}' style="width: 100%;"></paper-range-slider>
+          </div>
+
+          <div class="filter-line">
+            <div style="height: 40px;">
+              <span>Item Class</span>
+              <paper-button raised style="height: 28px;" on-tap="setClassesAll">Select All</paper-button>
+              <paper-button raised style="height: 28px;" on-tap="setClassesNone">Unselect All</paper-button>
+            </div>
+            <iron-selector attr-for-selected="name" multi selected-values="{{classes}}" class="layout horizontal wrap">
+              <template is="dom-repeat" items="{{allclasses}}">
+                <div name="{{item}}" class="item-class">
+                  <img src="{{assetUrl(item,'type')}}" alt="{{item}}">
+                  <paper-tooltip position="top" offset="2">{{item}}</paper-tooltip>
+                </div>
+              </template>
+              
+            </iron-selector>
+          </div>
+          
+        </paper-dialog-scrollable>
+        <div class="buttons">
+          <paper-button dialog-confirm autofocus on-tap="_filterChanged">OK</paper-button>
+        </div>
+      </paper-dialog>
 
   </template>
 
@@ -173,6 +234,24 @@
           type: Number,
           value: 0
         },
+        classes: {
+          type: Array,
+          value: function() {
+            return ['Swords', 'Daggers', 'Axes', 'Spears', 'Maces', 'Staves', 'Bows', 'Guns', 
+            'Armor', 'Vests', 'Helmets', 'Gauntlets', 'Boots', 
+            'Clothes', 'Shields', 'Hats', 'Bracers', 'Footwear', 
+            'Remedies', 'Potions', 'Spells', 'Projectiles', 'Rings', 'Pendants', 'Instruments'];
+          }
+        },
+        allclasses: {
+          type: Array,
+          value: function() {
+            return ['Swords', 'Daggers', 'Axes', 'Spears', 'Maces', 'Staves', 'Bows', 'Guns', 
+            'Armor', 'Vests', 'Helmets', 'Gauntlets', 'Boots', 
+            'Clothes', 'Shields', 'Hats', 'Bracers', 'Footwear', 
+            'Remedies', 'Potions', 'Spells', 'Projectiles', 'Rings', 'Pendants', 'Instruments'];
+          }
+        },
         skills: {
           type: Array,
           value: function() {
@@ -183,8 +262,7 @@
           type: Array,
           value: function() {
             return [];
-          },
-          observer: "_filterChanged"
+          }
         }
       },
       _queryChanged: function(){
@@ -194,23 +272,36 @@
       },
       _filterChanged: function(){
         if(this.itemdata==undefined) return;
-        this.set('items', this.filterItems(this.itemdata, this.search, this.minlv, this.maxlv));
+        this.set('items', this.filterItems());
         //console.log('_filterChanged', this.items.length, this.$.list._physicalCount);
       },
-      filterItems: function(items,q,l1,l2){
-        return items.filter(function (item) {
-          if(item.level < l1) return false;
-          if(item.level > l2) return false;
+      filterItems: function(){
+        return this.itemdata.filter(function (item) {
+          if(item.level < this.minlv) return false;
+          if(item.level > this.maxlv) return false;
+          if(this.classes!=undefined && this.classes.indexOf(item.class)==-1) return false;
 
-          if(q.length>2){
-            var re = new RegExp(q, 'i');
+          if(this.query.length>2){
+            var re = new RegExp(this.query, 'i');
             if(!re.test(item.name)) return false;
           }
           return true;
-        });
+        }.bind(this));
       },
       clearQuery: function(){
         this.set('query', "");
+      },
+      openFilterDialog: function(){
+        this.$.filterDialog.open();
+      },
+      setClassesAll: function(){
+        this.set('classes', ['Swords', 'Daggers', 'Axes', 'Spears', 'Maces', 'Staves', 'Bows', 'Guns', 
+            'Armor', 'Vests', 'Helmets', 'Gauntlets', 'Boots', 
+            'Clothes', 'Shields', 'Hats', 'Bracers', 'Footwear', 
+            'Remedies', 'Potions', 'Spells', 'Projectiles', 'Rings', 'Pendants', 'Instruments']);
+      },
+      setClassesNone: function(){
+        this.set('classes', []);
       },
       assetUrl: function(i,t){
         switch (t) {

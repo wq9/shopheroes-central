@@ -221,7 +221,7 @@
             <div class="price">{{formatNumber(item.gold)}}</div>
             <div style="width: 108px; text-align: right;">{{formatNumber(item.exp)}} <span class="small">EXP</span></div>
             <div class="power">{{formatNumber(item.power)}}</div>
-            <div class="time">{{formatCraftTime(skills.*, item.skills)}}</div>
+            <div class="time">{{formatCraftTime(user.skills.*, item.skills)}}</div>
             <div style="width: 272px;">
               <sh-ressource ressources="{{item.ressources}}"></sh-ressource>
             </div>
@@ -288,10 +288,10 @@
         <h2>Enter your skills to get the correct crafting time</h2>
         <paper-dialog-scrollable>
           <div class="layout horizontal wrap">
-          <template is="dom-repeat" items="{{skills}}">
+          <template is="dom-repeat" items="{{user.skills}}">
             <div name="{{item}}" class="skill-class layout vertical">
               <img src="{{assetUrl(index,'skill')}}" alt="{{item}}">
-              <paper-input label="" allowed-pattern="[0-9]" value="{{item}}"></paper-input>
+              <paper-input label="" allowed-pattern="[0-9]" value="{{item.value}}" id="{{index}}"></paper-input>
               <paper-tooltip position="top" offset="2">{{getSkillName(index)}}</paper-tooltip>
             </div>
           </template>
@@ -372,13 +372,6 @@
               'Spooky Shop Pack','Summer Sports Pack','Cinco De Mayo Pack','Back To School Pack','Hollow Pack','Patriot Pack',
             ];
           }
-        },
-        skills: {
-          type: Array,
-          value: function() {
-            return [100,100,100,100,100,100,100,100,100,100,100,100];
-          },
-          notify: true
         },
         skillName: {
           type: Array,
@@ -512,8 +505,8 @@
         var m = 0;
         for(i in item){
           if(item[i] > 0){
-            if(this.skills[i]>0){
-              m += item[i]/this.skills[i];
+            if(this.user.skills[i].value>0){
+              m += item[i]/this.user.skills[i].value;
             }else{
               return 0;
             }

@@ -21,7 +21,7 @@
       .item>div{
         flex: 0 0 auto;
       }
-      .item img{
+      .item img, .item iron-image{
         width: 32px;
         height: 32px;
       }
@@ -105,7 +105,7 @@
       #filterDialog{
         width: 80%;
         min-width: 298px;
-        max-width: 698px;
+        max-width: 715px;
       }
       #filterDialog>paper-dialog-scrollable{
         --paper-dialog-scrollable:{
@@ -133,6 +133,23 @@
         width: 100%; height: 100%;
       }
       .item-class.iron-selected{
+        opacity: 1;
+      }
+
+      .item-chest{
+        width: 64px; height: 64px;
+        background-color: rgba(0,0,0,0.17);
+        border: 1px solid rgba(0,0,0,0.17);
+        cursor: pointer;
+        opacity: 0.37;
+        margin: 2px;
+        border-radius: 3px;
+        text-align: center;
+      }
+      .item-chest>iron-image{
+        height: 100%; width: 100%;
+      }
+      .item-chest.iron-selected{
         opacity: 1;
       }
 
@@ -186,10 +203,12 @@
       <iron-list id="list" items="[[items]]" max-physical-count="100">
         <template>
           <div class="item layout horizontal center">
-            <div style="width: 32px; height: 32px;"><img src="{{assetUrl(item.class,'type')}}" alt="{{item.class}}"></div>
+            <div style="width: 32px; height: 32px;">
+              <img src="{{assetUrl(item.class,'type')}}" alt="{{item.class}}">
+            </div>
             <div style="width: 32px; height: 32px;">
               <template is="dom-if" if="{{isChest(item.source)}}">
-                <img src="{{assetUrl(item.source,'chest')}}" alt="{{item.class}}">
+                <iron-image src="{{assetUrl(item.source,'chest')}}" sizing="contain" alt="{{item.source}}" preload fade></iron-image>
                 <paper-tooltip position="top" offset="2">{{item.source}}</paper-tooltip>
               </template>
             </div>
@@ -239,6 +258,23 @@
               </template>
             </iron-selector>
           </div>
+
+          <div class="filter-line">
+            <div style="height: 40px;">
+              <span class="subheader">Chests and Packages</span>
+              <paper-button raised style="height: 28px;" on-tap="setChestsAll">Select All</paper-button>
+              <paper-button raised style="height: 28px;" on-tap="setChestsNone">Clear</paper-button>
+            </div>
+            <iron-selector attr-for-selected="name" multi selected-values="{{chests}}" class="layout horizontal wrap">
+              <template is="dom-repeat" items="{{allchests}}">
+                <div name="{{item}}" class="item-chest" style$="{{chestStyle(item)}}" on-tap="chestTap">
+                  <iron-image src="{{assetUrl(item,'chest')}}" sizing="contain" alt="{{item}}" preload fade></iron-image>
+                  <paper-tooltip position="top" offset="2">{{item}}</paper-tooltip>
+                </div>
+              </template>
+            </iron-selector>
+          </div>
+
         </paper-dialog-scrollable>
         <div class="buttons">
           <paper-button dialog-confirm autofocus on-tap="_filterChanged">OK</paper-button>
@@ -310,6 +346,30 @@
             'Spells', 'Projectiles', 'Instruments'];
           }
         },
+        chests: {
+          type: Array,
+          value: function() {
+            return [
+              '---','Wooden Chest','Leather Chest','Iron Chest','Golden Chest','Magic Chest','Primal Chest','Dwarvish Chest','City Raid',
+              'Advanced Shopfare','Warrior Pack','Wizard Pack','Ninja Pack','Pack of all Trades','Heroic Pack','Epic Pack',
+              'Christmas Pack','Winter Pack','Easter Pack','Fall Pack','Farmer Pack','Halloween Pack',
+              'Harvest Pack','Holiday Pack','Thanksgiving Pack','Valentine\'s Pack',
+              'Spooky Shop Pack','Summer Sports Pack','Cinco De Mayo Pack','Back To School Pack','Hollow Pack','Patriot Pack',
+            ];
+          }
+        },
+        allchests: {
+          type: Array,
+          value: function() {
+            return [
+              '---','Wooden Chest','Leather Chest','Iron Chest','Golden Chest','Magic Chest','Primal Chest','Dwarvish Chest','City Raid',
+              'Advanced Shopfare','Warrior Pack','Wizard Pack','Ninja Pack','Pack of all Trades','Heroic Pack','Epic Pack',
+              'Christmas Pack','Winter Pack','Easter Pack','Fall Pack','Farmer Pack','Halloween Pack',
+              'Harvest Pack','Holiday Pack','Thanksgiving Pack','Valentine\'s Pack',
+              'Spooky Shop Pack','Summer Sports Pack','Cinco De Mayo Pack','Back To School Pack','Hollow Pack','Patriot Pack',
+            ];
+          }
+        },
         skills: {
           type: Array,
           value: function() {
@@ -346,6 +406,7 @@
           if(item.level < this.minlv) return false;
           if(item.level > this.maxlv) return false;
           if(this.classes!=undefined && this.classes.indexOf(item.class)==-1) return false;
+          if(this.chests!=undefined && this.chests.indexOf(item.source)==-1) return false;
 
           if(this.query.length>2){
             var re = new RegExp(this.query, 'i');
@@ -361,10 +422,7 @@
         this.$.filterDialog.open();
       },
       setClassesAll: function(){
-        this.set('classes', ['Swords', 'Daggers', 'Axes', 'Spears', 'Maces', 'Staves', 'Bows', 'Guns', 
-            'Armor', 'Vests', 'Helmets', 'Gauntlets', 'Boots', 
-            'Clothes', 'Shields', 'Hats', 'Bracers', 'Footwear', 
-            'Remedies', 'Potions', 'Spells', 'Projectiles', 'Rings', 'Pendants', 'Instruments']);
+        this.set('classes', this.allclasses);
       },
       setClassesNone: function(){
         this.set('classes', []);
@@ -402,6 +460,25 @@
           default:
             return "background-color: rgba(9,182,240,1);";
         }
+      },
+      setChestsAll: function(){
+        this.set('chests', this.allchests);
+      },
+      setChestsNone: function(){
+        this.set('chests', []);
+      },
+      chestTap: function(e){
+        if(this.chests.length==this.allchests.length){
+          this.set('chests', [e.model.item]);
+          e.stopPropagation();
+        }else if(this.chests.length==1 && this.chests[0]==e.model.item){
+          this.setChestsAll();
+          e.stopPropagation();
+        }
+      },
+      chestStyle: function(t){
+        if(t.indexOf('Chest') !== -1) return "background-color: rgba(0,0,0,0.05);";
+        return "background-color: rgba(0,0,0,0.03);";
       },
       openSkillDialog: function(){
         this.$.skillDialog.open();

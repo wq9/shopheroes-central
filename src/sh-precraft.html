@@ -32,7 +32,7 @@
     </style>
 
     <template is="dom-repeat" items="{{precrafts}}">
-        <div class="ressource" style$="{{getStyle(item)}}">
+        <div class="ressource" style$="{{getStyle(item.id)}}">
           <div class="qty" style="{{getColor(item)}}">{{item.qty}}</div>
           <paper-tooltip position="top" offset="2">{{formatName(item)}}</paper-tooltip>
         </div>
@@ -48,8 +48,7 @@
         },
       },
       getStyle: function(i){
-        var n = i.name.toLowerCase().replace(/'| /gi, "")
-        return "background-image: url('http://sols9.com/shopheroes/assets/ItemImages/?n="+n+"');";
+        return "background-image: url('http://sh-api.sols9.com/images/item_icon/"+i+".png');";
       },
       getColor: function(i){
         switch (i.quality) {

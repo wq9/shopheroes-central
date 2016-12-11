@@ -67,9 +67,9 @@
       }
 
       .image{
-        width: 40px;
-        height: 32px;
-        background-position: 50% 50%;
+        width: 48px;
+        height: 40px;
+        background-position: 0% 50%;
         background-size: contain;
         background-repeat: no-repeat;
       }
@@ -184,7 +184,7 @@
       }
     </style>
 
-    <iron-ajax auto url="/json/items.json" handle-as="json" 
+    <iron-ajax auto url="http://sh-api.sols9.com/data/crafts" handle-as="json" 
       debounce-duration="300" last-response="{{itemdata}}" on-response="_filterChanged"></iron-ajax>
 
       <div class="header layout horizontal center">
@@ -192,12 +192,12 @@
           <paper-icon-button icon="filter-list" on-tap="openFilterDialog"></paper-icon-button>
         </div>
         <!--<div style="width: 40px;">LV</div>-->
-        <div style="width: 220px; text-align: left;">
-          <paper-input label="Search" value="{{query}}" style="height: 97px; width: 180px; margin: 0 0 0 40px;">
+        <div style="max-width: 220px; text-align: left;">
+          <paper-input label="Search" value="{{query}}" style="height: 97px; max-width: 180px; margin: 0 0 0 40px;">
             <paper-icon-button suffix icon="close" style="color: rgba(0,0,0,0.37);" on-tap="clearQuery"></paper-icon-button>
           </paper-input>
         </div>
-        <div class="flex">TIME
+        <div class="flex" style="white-sapce: nowrap;">TIME
           <paper-icon-button icon="settings" on-tap="openSkillDialog"></paper-icon-button>
         </div>
       </div>
@@ -353,7 +353,7 @@
           type: Array,
           value: function() {
             return [
-              '---','Wooden Chest','Leather Chest','Iron Chest','Golden Chest','Magic Chest','Primal Chest','Dwarvish Chest','City Raid',
+              '---','Wooden Chest','Leather Chest','Iron Chest','Golden Chest','Magic Chest','Dwarvish Chest','Primal Chest','City Raid',
               'Advanced Shopfare','Warrior Pack','Wizard Pack','Ninja Pack','Pack of all Trades','Heroic Pack','Epic Pack',
               'Christmas Pack','Winter Pack','Easter Pack','Fall Pack','Farmer Pack','Halloween Pack',
               'Harvest Pack','Holiday Pack','Thanksgiving Pack','Valentine\'s Pack',
@@ -365,7 +365,7 @@
           type: Array,
           value: function() {
             return [
-              '---','Wooden Chest','Leather Chest','Iron Chest','Golden Chest','Magic Chest','Primal Chest','Dwarvish Chest','City Raid',
+              '---','Wooden Chest','Leather Chest','Iron Chest','Golden Chest','Magic Chest','Dwarvish Chest','Primal Chest','City Raid',
               'Advanced Shopfare','Warrior Pack','Wizard Pack','Ninja Pack','Pack of all Trades','Heroic Pack','Epic Pack',
               'Christmas Pack','Winter Pack','Easter Pack','Fall Pack','Farmer Pack','Halloween Pack',
               'Harvest Pack','Holiday Pack','Thanksgiving Pack','Valentine\'s Pack',
@@ -496,7 +496,7 @@
         }
       },
       getImageStyle: function(i){
-        return "background-image: url('http://sols9.com/shopheroes/assets/ItemImages/?n="+i.id+"');";
+        return "background-image: url('http://sh-api.sols9.com/images/item_icon/"+i.id+".png');";
       },
       formatNumber: function(n){
         return n.toLocaleString();

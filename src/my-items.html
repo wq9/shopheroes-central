@@ -436,6 +436,11 @@
             var re = new RegExp(this.query, 'i');
             if(re.test(item.name)) return true;
             if('mskill' in item && re.test(item.mskill)) return true;
+
+            var re2 = new RegExp('\\b'+this.query, 'i');
+            //if(re2.test(item.source)) return true;
+            if('mskill' in item && re2.test(item.mskill)) return true;
+
             return false;
           }
           return true;

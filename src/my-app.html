@@ -17,6 +17,7 @@
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 
+<link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
@@ -116,7 +117,7 @@
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="items" href="/items">Items</a>
           <a name="about" href="/about">About</a>
-          <a name="contact" href="/contact">Contact</a>
+          <!--<a name="contact" href="/contact">Contact</a>-->
         </iron-selector>
       </app-drawer>
 
@@ -132,7 +133,7 @@
             <paper-tabs selected="[[page]]" attr-for-selected="name" noink hidden$="{{!isTablet}}" class="">
               <paper-tab link name="items"><a href="/items" tabindex="-1">ITEMS</a></paper-tab>
               <paper-tab link name="about"><a href="/about" tabindex="-1">ABOUT</a></paper-tab>
-              <paper-tab link name="contact"><a href="/contact" tabindex="-1">CONTACT</a></paper-tab>
+              <!--<paper-tab link name="contact"><a href="/contact" tabindex="-1">CONTACT</a></paper-tab>-->
             </paper-tabs>
             <!--
             <paper-menu-button vertical-align="top" horizontal-align="right">

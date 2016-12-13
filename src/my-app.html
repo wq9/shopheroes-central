@@ -40,6 +40,8 @@
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-icons.html">
 
+<link rel="import" href="my-items.html"> <!-- preload this one -->
+
 <dom-module id="my-app">
   <template>
     <style include="shared-styles iron-flex iron-flex-alignment iron-positioning">
@@ -108,6 +110,9 @@
     
     <iron-media-query query="(min-width: 600px)" query-matches="{{isTablet}}"></iron-media-query>
 
+    <iron-ajax auto url="http://sh-api.sols9.com/data/crafts" handle-as="json" 
+      debounce-duration="300" last-response="{{crafts}}" on-response="craftsResponse"></iron-ajax>
+
     <app-drawer-layout force-narrow fullbleed>
       
       <!-- Drawer content -->
@@ -151,7 +156,8 @@
             attr-for-selected="name"
             fallback-selection="view404"
             role="main">
-          <my-items name="items" class="fit layout vertical center" user="{{user}}"></my-items>
+          <my-items name="items" class="fit layout vertical center" user="{{user}}" crafts="{{crafts}}"></my-items>
+          <my-craft name="craft" user="{{user}}" route="[[subroute]]" crafts="{{crafts}}"></my-craft>
           <my-menu name="menu"></my-menu>
           <my-about name="about"></my-about>
           <my-contact name="contact"></my-contact>
@@ -182,6 +188,10 @@
             };
           },
           notify: true
+        },
+        crafts: {
+          type: Array,
+          notify: true
         }
       },
 
@@ -197,6 +207,11 @@
         // Load page import on demand. Show 404 page if fails
         var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
         this.importHref(resolvedPageUrl, null, this._showPage404, true);
+      },
+
+      craftsResponse: function(){
+        this.$$('my-items')._filterChanged();
+        this.$$('my-craft').getCraftData();
       },
 
       _showPage404: function() {

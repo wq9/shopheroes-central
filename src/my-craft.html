@@ -1,0 +1,62 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-craft">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+
+      .content{
+        max-width: 800px;
+        margin: 16px auto;
+        color: rgba(0,0,0,0.87);
+      }
+
+      .paper-font-title{
+        margin-top: 24px;
+      }
+    </style>
+    
+    <app-route
+        route="[[route]]"
+        pattern="/:id"
+        data="{{routeData}}"></app-route>
+
+    <div class="card content">
+      {{item.name}}
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-craft',
+      properties: {
+        item: Object,
+        crafts: Array
+      },
+      observers: [
+        'getCraftData(routeData.id)'
+      ],
+      getCraftData: function(s){
+        var id = this.routeData.id;
+        if(this.crafts==undefined) return;
+        if(this.item!=undefined && this.item.id==id) return; //function get called twice?
+        
+        console.log('routeData.id', id);
+
+        for(var i in this.crafts){
+          if(this.crafts[i].id == id){
+            this.set('item', this.crafts[i]);
+            //console.log(this.item);
+            return; //break;
+          }
+        }
+        this.set('item', {"name": "Item not found"});
+      }
+    });
+  </script>
+</dom-module>

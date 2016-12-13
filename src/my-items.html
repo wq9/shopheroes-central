@@ -196,8 +196,7 @@
       }
     </style>
 
-    <iron-ajax auto url="http://sh-api.sols9.com/data/crafts" handle-as="json" 
-      debounce-duration="300" last-response="{{itemdata}}" on-response="_filterChanged"></iron-ajax>
+    
 
       <div class="header layout horizontal center">
         <div style="width: 72px;">
@@ -228,8 +227,10 @@
               </template>
             </div>
             <div class="level">{{item.level}}</div>
-            <div class="image" style="{{getImageStyle(item)}}"></div>
-            <div style="width: 180px;">{{item.name}}</div>
+            <a href="/craft/{{item.id}}" class="nolink layout horizontal center">
+              <div class="image" style="{{getImageStyle(item)}}"></div>
+              <div style="width: 180px;">{{item.name}}</div>
+            </a>
             <div class="price">{{formatNumber(item.gold)}}</div>
             <div style="width: 108px; text-align: right;">{{formatNumber(item.exp)}} <span class="small">EXP</span></div>
             <div class="power">{{formatNumber(item.power)}}</div>
@@ -407,12 +408,6 @@
             return ['Metal Working', 'Wood Working', 'Textile Working', 'Alchemy', 'Magic', 
             'Weapon Crafting', 'Armor Making', 'Arts and Crafts', 'Jewelry', 'Rune Writing', 'Tinkering', 'Mastery'];
           }
-        },
-        itemdata: {
-          type: Array,
-          value: function() {
-            return [];
-          }
         }
       },
       _queryChanged: function(){
@@ -421,12 +416,13 @@
         }, 300);
       },
       _filterChanged: function(){
-        if(this.itemdata==undefined) return;
+        //console.log(this.crafts);
+        if(this.crafts==undefined) return;
         this.set('items', this.filterItems());
         //console.log('_filterChanged', this.items.length, this.$.list._physicalCount);
       },
       filterItems: function(){
-        return this.itemdata.filter(function (item) {
+        return this.crafts.filter(function (item) {
           if(item.level < this.minlv) return false;
           if(item.level > this.maxlv) return false;
           if(this.classes!=undefined && this.classes.indexOf(item.class)==-1) return false;

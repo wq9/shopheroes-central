@@ -41,8 +41,6 @@
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-icons.html">
 
-<link rel="import" href="my-items.html"> <!-- preload this one -->
-
 <dom-module id="my-app">
   <template>
     <style include="shared-styles iron-flex iron-flex-alignment iron-positioning">
@@ -224,8 +222,8 @@
       },
 
       craftsResponse: function(){
-        this.$$('my-items')._filterChanged();
-        this.$$('my-craft').getCraftData();
+        //this.$$('my-items')._filterChanged();
+        //this.$$('my-craft').getCraftData();
       },
 
       _showPage404: function() {

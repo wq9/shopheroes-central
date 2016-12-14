@@ -288,7 +288,6 @@
       is: 'my-craft',
       properties: {
         item: Object,
-        crafts: Array,
         qualities: {
           type: Array,
           value: function(){
@@ -305,9 +304,10 @@
         }
       },
       observers: [
-        'getCraftData(routeData.id)'
+        'getCraftData(routeData.id, crafts.*)'
       ],
       getCraftData: function(s){
+        //console.log(s);
         var id = this.routeData.id;
         if(this.crafts==undefined) return;
         if(this.item!=undefined && this.item.id==id) return; //function get called twice?
@@ -320,7 +320,7 @@
             this.$.itemImg.src = "http://sh-api.sols9.com/images/craft/"+this.item.id+".png";
             this.$.itemClass.src = "http://sh-api.sols9.com/images/itemclass/"+this.item.class+".png";
 
-            console.log(this.item);
+            //console.log(this.item);
             return; //break;
           }
         }

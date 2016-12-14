@@ -410,6 +410,9 @@
           }
         }
       },
+      observers: [
+        '_filterChanged(crafts.splices)'
+      ],
       _queryChanged: function(){
         this.debounce('queryChanged', function() {
           this.set('search', this.query.trim());

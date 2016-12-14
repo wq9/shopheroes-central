@@ -34,8 +34,7 @@
 
     <template is="dom-repeat" items="{{ressources}}">
       <template is="dom-if" if="{{!isZero(item)}}">
-        <div class="ressource qty" style$="{{getStyle(index)}}">{{item}}
-        </div>
+        <div class="ressource qty" style$="{{getStyle(index)}}" title="{{item}} {{getName(index)}}">{{item}}</div>
       </template>
     </template>
   </template>
@@ -49,14 +48,17 @@
         },
         ressourceMap: {
           type: Array,
-          value: ['iron','wood','leather','herb','steel','hardwood','fabric','oil','mana','gems']
+          value: ['Iron','Wood','Leather','Herb','Steel','Hardwood','Fabric','Oil','Mana','Jewels']
         }
       },
       isZero: function(n){
         return n==0;
       },
       getStyle: function(i){
-        return "background-image: url('https://cdn.rawgit.com/ShopHeroesData/datahub-shopheroes/master/src/assets/ResourceIcons/"+this.ressourceMap[i]+".png');";
+        return "background-image: url('http://sh-api.sols9.com/images/resource/"+this.ressourceMap[i]+".png');";
+      },
+      getName: function(i){
+        return this.ressourceMap[i];
       }
     });
   </script>

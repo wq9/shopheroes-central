@@ -36,9 +36,9 @@
     </style>
 
     <template is="dom-repeat" items="{{craft.used}}">
-        <div class$="{{getClass(item)}}">
+        <div class$="{{getClass(item)}}" title="{{formatName(item)}}">
           <!--<div class="qty" style="{{getColor(item)}}">{{item.qty}}</div>-->
-          <paper-tooltip position="top" offset="2">{{formatName(item)}}</paper-tooltip>
+          <!--<paper-tooltip position="top" offset="2">{{formatName(item)}}</paper-tooltip>-->
           <div class="fit craft" style$="{{getStyle(craft.id)}}"></div>
         </div>
     </template>

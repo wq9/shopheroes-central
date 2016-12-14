@@ -11,6 +11,8 @@
       .item{
         height: 40px;
         border-bottom: 1px solid rgba(0,0,0,0.07);
+        min-width: 100%;
+        width: auto !important;
       }
       .item:hover{
         background-color: rgba(0,0,0,0.02);
@@ -43,7 +45,7 @@
       }
 
       .class-div{
-        width: 40px; height: 32px;
+        width: 32px; height: 32px;
         text-align: right;
       }
       .level{
@@ -55,7 +57,7 @@
            1px -1px 1px #000,
           -1px 1px 1px #000,
            1px 1px 1px #000;
-        width: 40px; 
+        width: 32px; 
         height: 32px;
         background-image: url('http://sols9.com/shopheroes/assets/icon/level_blue.png');
         background-position: 50% 50%;
@@ -171,7 +173,7 @@
         overflow: hidden;
         margin: 2px;
       }
-      .skill-class>img{
+      .skill-class>iron-image{
         width: 64px;;
         height: 66px;
         margin-bottom: -32px;
@@ -196,19 +198,17 @@
       }
     </style>
 
-    
-
       <div class="header layout horizontal center">
-        <div style="width: 72px;">
+        <div style="width: 112px; flex: 0 1 auto;">
           <paper-icon-button icon="filter-list" on-tap="openFilterDialog"></paper-icon-button>
         </div>
-        <!--<div style="width: 40px;">LV</div>-->
         <div style="max-width: 220px; text-align: left;">
-          <paper-input label="Search" value="{{query}}" style="height: 97px; max-width: 180px; margin: 0 0 0 40px;">
+          <paper-input label="Search" value="{{query}}" style="height: 97px; max-width: 180px;">
             <paper-icon-button suffix icon="close" style="color: rgba(0,0,0,0.37);" on-tap="clearQuery"></paper-icon-button>
           </paper-input>
         </div>
-        <div class="flex" style="white-sapce: nowrap;">TIME
+        <div class="layout horizontal center center-justified flex" style="white-space: nowrap;">
+          <div>TIME</div>
           <paper-icon-button icon="settings" on-tap="openSkillDialog"></paper-icon-button>
         </div>
       </div>
@@ -216,15 +216,15 @@
       <iron-list id="list" items="[[items]]" max-physical-count="100">
         <template>
           <div class="item layout horizontal center">
-            <div class="class-div">
-              <iron-image src="{{assetUrl(item.class,'type')}}" sizing="contain" alt="{{item.class}}" preload fade></iron-image>
-              <paper-tooltip position="top" offset="2">{{item.class}}</paper-tooltip>
-            </div>
-            <div style="width: 32px; height: 32px;">
+            <div style="width: 32px; height: 32px; margin-left: 4px;">
               <template is="dom-if" if="{{isChest(item.source)}}">
-                <iron-image src="{{assetUrl(item.source,'chest')}}" sizing="contain" alt="{{item.source}}" preload fade></iron-image>
-                <paper-tooltip position="top" offset="2">{{item.source}}</paper-tooltip>
+                <iron-image src="{{assetUrl(item.source,'chest')}}" sizing="contain" alt="{{item.source}}" title="{{item.source}}" preload fade></iron-image>
+                <!--<paper-tooltip position="top" offset="2">{{item.source}}</paper-tooltip>-->
               </template>
+            </div>
+            <div class="class-div">
+              <iron-image src="{{assetUrl(item.class,'type')}}" sizing="contain" alt="{{item.class}}" title="{{item.class}}" preload fade></iron-image>
+              <!--<paper-tooltip position="top" offset="2">{{item.class}}</paper-tooltip>-->
             </div>
             <div class="level">{{item.level}}</div>
             <a href="/craft/{{item.id}}" class="nolink layout horizontal center">
@@ -240,8 +240,8 @@
             </div>
             <div style="width: 108px;">
               <template is="dom-if" if="{{isSkill(item)}}">
-                <div class="mskill" tquality$="{{item.mquality}}">{{item.mskill}}</div>
-                <paper-tooltip position="top" offset="2">{{item.mskill}} @ {{item.mquality}}</paper-tooltip>
+                <div class="mskill" tquality$="{{item.mquality}}" title="{{item.mskill}} @ {{item.mquality}}">{{item.mskill}}</div>
+                <!--<paper-tooltip position="top" offset="2">{{item.mskill}} @ {{item.mquality}}</paper-tooltip>-->
               </template>
             </div>
             <div style="width: 128px;" class="layout horizontal">
@@ -319,9 +319,9 @@
           <div class="layout horizontal wrap">
           <template is="dom-repeat" items="{{user.skills}}">
             <div name="{{item}}" class="skill-class layout vertical">
-              <img src="{{assetUrl(index,'skill')}}" alt="{{item}}">
+              <iron-image src="http://sh-api.sols9.com/images/skill/{{item.name}}.png" sizing="contain" alt="{{item.name}}"></iron-image>
               <paper-input label="" allowed-pattern="[0-9]" value="{{item.value}}"></paper-input>
-              <paper-tooltip position="top" offset="2">{{getSkillName(index)}}</paper-tooltip>
+              <paper-tooltip position="top" offset="2">{{item.name}}</paper-tooltip>
             </div>
           </template>
           </div>
@@ -400,13 +400,6 @@
               'Harvest Pack','Holiday Pack','Thanksgiving Pack','Valentine\'s Pack',
               'Spooky Shop Pack','Summer Sports Pack','Cinco De Mayo Pack','Back To School Pack','Hollow Pack','Patriot Pack',
             ];
-          }
-        },
-        skillName: {
-          type: Array,
-          value: function() {
-            return ['Metal Working', 'Wood Working', 'Textile Working', 'Alchemy', 'Magic', 
-            'Weapon Crafting', 'Armor Making', 'Arts and Crafts', 'Jewelry', 'Rune Writing', 'Tinkering', 'Mastery'];
           }
         }
       },
@@ -513,16 +506,10 @@
       openSkillDialog: function(){
         this.$.skillDialog.open();
       },
-      getSkillName: function(i){
-        return this.skillName[i];
-      },
       assetUrl: function(i,t){
         switch (t) {
           case "type":
             return "https://cdn.rawgit.com/ShopHeroesData/datahub-shopheroes/master/src/assets/ItemIcons/"+i+".png";
-          case "skill":
-            var n = this.skillName[i].toLowerCase().replace(/ /gi, "");
-            return "https://cdn.rawgit.com/ShopHeroesData/datahub-shopheroes/master/src/assets/SkillIcons/"+n+".png";
           case "chest":
             return "http://sols9.com/shopheroes/assets/chest/"+i+".png";
           default:

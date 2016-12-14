@@ -32,9 +32,9 @@
     </style>
 
     <template is="dom-repeat" items="{{artifacts}}">
-        <div class="ressource" style$="{{getStyle(item.name)}}">
+        <div class="ressource" style$="{{getStyle(item.name)}}" title="{{item.qty}} {{item.name}}">
           <div class="qty">{{item.qty}}</div>
-          <paper-tooltip position="top" offset="2">{{item.qty}} {{item.name}}</paper-tooltip>
+          <!--<paper-tooltip position="top" offset="2">{{item.qty}} {{item.name}}</paper-tooltip>-->
         </div>
     </template>
   </template>

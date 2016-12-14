@@ -62,12 +62,49 @@
         color: inherit;
       }
 
-      /*paper style*/
+      .ellipsis{
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      /* paper styles */
+      .paper-font-display4 {
+        @apply(--paper-font-display4);
+      }
+      .paper-font-display3 {
+        @apply(--paper-font-display3);
+      }
+      .paper-font-display2 {
+        @apply(--paper-font-display2);
+      }
+      .paper-font-display1 {
+        @apply(--paper-font-display1);
+      }
+      .paper-font-headline {
+        @apply(--paper-font-headline);
+      }
       .paper-font-title {
         @apply(--paper-font-title);
       }
       .paper-font-body2 {
         @apply(--paper-font-body2);
+      }
+
+      .paper-font-body1 {
+        @apply(--paper-font-body1);
+      }
+
+      .paper-font-caption {
+        @apply(--paper-font-caption);
+      }
+
+      .paper-font-menu {
+        @apply(--paper-font-menu);
+      }
+
+      .paper-font-button {
+        @apply(--paper-font-button);
       }
 
       /* Craft Quality */
@@ -79,6 +116,17 @@
       }
       .q-Flawless{
         background: radial-gradient(circle, rgba(0,255,255,0.8), rgba(0,0,0,0) 70%);
+      }
+
+      [tquality]{
+        padding-left: 2px;
+        color: rgba(255,255,255,1);
+        font-weight: bold;
+        text-shadow:
+          -1px -1px 1px #000,
+           1px -1px 1px #000,
+          -1px 1px 1px #000,
+           1px 1px 1px #000;
       }
 
       [tquality="Common"]{

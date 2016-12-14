@@ -1,0 +1,75 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="sh-crafttime">
+  <template>
+    <style include="shared-styles iron-flex iron-flex-alignment">
+      :host {
+        display: block;
+      }
+    </style>
+    {{formatted}}
+  </template>
+
+  <script>
+    Polymer({
+      is: 'sh-crafttime',
+      properties: {
+        formatted: {
+          type: String,
+          value: '-'
+        },
+        multiplier: {
+          type: Number,
+          value: 1
+        }
+      },
+      observers: [
+        'formatCraftTime(user.skills.*, item.skills.*)'
+      ],
+      formatCraftTime: function(item,setting){
+        var t = this.getCraftTime(this.item.skills);
+        var f = this.formatTime(t);
+        this.set('formatted', f)
+        //return ;
+      },
+      getCraftTime: function(item){
+        var m = 0;
+        for(i in item){
+          if(item[i] > 0){
+            if(this.user.skills[i].value>0){
+              m += item[i]/this.user.skills[i].value;
+            }else{
+              return 0;
+            }
+          }
+        }
+        return Math.ceil(m*60*this.multiplier);
+      },
+      formatTime: function(sec){
+        sec = parseInt(sec, 10);
+        if(sec<=0) return "-";
+
+        var h   = Math.floor(sec / 3600);
+        var m = Math.floor((sec - (h * 3600)) / 60);
+        var s = sec - (h * 3600) - (m * 60);
+
+        var r="";
+        if(h>0){
+          if (m < 10) {m = "0"+m;}
+          if (s < 10) {s = "0"+s;}
+          return h+"h"+m+"m"+s+"s";
+        }
+        if(m>0){
+          if (s < 10) {s = "0"+s;}
+          return m+"m"+s+"s";
+        }
+        if(s>0){
+          return s+"s";
+        }
+        return "N/A";
+        //return h+"h"+m+"m"+s+"s";
+      }
+    });
+  </script>
+</dom-module>

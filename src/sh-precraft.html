@@ -29,13 +29,17 @@
           -1px 1px 1px #000,
            1px 1px 1px #000;
       }
+
+      .nolink:hover{
+        text-decoration: none;
+      }
     </style>
 
     <template is="dom-repeat" items="{{precrafts}}">
-        <div class="ressource" style$="{{getStyle(item.id)}}">
+        <a class="nolink" href="/craft/{{item.id}}" title="{{formatName(item)}}"><div class="ressource" style$="{{getStyle(item.id)}}">
           <div class="qty" style="{{getColor(item)}}">{{item.qty}}</div>
-          <paper-tooltip position="top" offset="2">{{formatName(item)}}</paper-tooltip>
-        </div>
+          <!--<paper-tooltip position="top" offset="2">{{formatName(item)}}</paper-tooltip>-->
+        </div></a>
     </template>
   </template>
 

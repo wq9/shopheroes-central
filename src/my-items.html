@@ -320,7 +320,7 @@
           <template is="dom-repeat" items="{{user.skills}}">
             <div name="{{item}}" class="skill-class layout vertical">
               <img src="{{assetUrl(index,'skill')}}" alt="{{item}}">
-              <paper-input label="" allowed-pattern="[0-9]" value="{{item.value}}" id="{{index}}"></paper-input>
+              <paper-input label="" allowed-pattern="[0-9]" value="{{item.value}}"></paper-input>
               <paper-tooltip position="top" offset="2">{{getSkillName(index)}}</paper-tooltip>
             </div>
           </template>

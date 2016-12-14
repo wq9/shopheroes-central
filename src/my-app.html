@@ -37,6 +37,7 @@
 <link rel="import" href="sh-artifact.html">
 <link rel="import" href="sh-precraft.html">
 <link rel="import" href="sh-componentfor.html">
+<link rel="import" href="sh-crafttime.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-icons.html">
 
@@ -157,7 +158,7 @@
             fallback-selection="view404"
             role="main">
           <my-items name="items" class="fit layout vertical center" user="{{user}}" crafts="{{crafts}}"></my-items>
-          <my-craft name="craft" user="{{user}}" route="[[subroute]]" crafts="{{crafts}}"></my-craft>
+          <my-craft name="craft" user="{{user}}" route="[[subroute]]" user="{{user}}" crafts="{{crafts}}"></my-craft>
           <my-menu name="menu"></my-menu>
           <my-about name="about"></my-about>
           <my-contact name="contact"></my-contact>
@@ -184,7 +185,20 @@
           type: Object,
           value: function() {
             return {
-              skills: [{value: 100},{value: 100},{value: 100},{value: 100},{value: 100},{value: 100},{value: 100},{value: 100},{value: 100},{value: 100},{value: 100},{value: 100}]
+              skills: [
+                {value: 100, name: "Metal Working"},
+                {value: 100, name: "Wood Working"},
+                {value: 100, name: "Textile Working"},
+                {value: 100, name: "Alchemy"},
+                {value: 100, name: "Magic"},
+                {value: 100, name: "Weapon Crafting"},
+                {value: 100, name: "Armor Making"},
+                {value: 100, name: "Arts and Crafts"},
+                {value: 100, name: "Jewelry"},
+                {value: 100, name: "Rune Writing"},
+                {value: 100, name: "Tinkering"},
+                {value: 100, name: "Mastery"}
+              ]
             };
           },
           notify: true

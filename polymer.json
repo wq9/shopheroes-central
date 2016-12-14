@@ -3,6 +3,7 @@
   "shell": "src/my-app.html",
   "fragments": [
     "src/my-items.html",
+    "src/my-craft.html",
     "src/my-about.html",
     "src/my-contact.html",
     "src/my-view404.html"

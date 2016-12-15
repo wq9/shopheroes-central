@@ -20,10 +20,6 @@
       .item>div{
         flex: 0 0 auto;
       }
-      .item img, .item iron-image{
-        width: 32px;
-        height: 32px;
-      }
 
       .header{
         flex: 0 0 auto;
@@ -109,10 +105,13 @@
         padding-right: 26px;
       }
 
+      .field{
+        padding-right: 4px;
+      }
+
       #filterDialog{
-        width: 80%;
-        min-width: 298px;
         max-width: 715px;
+        margin: 64px 0 16px 0;
       }
       #filterDialog>paper-dialog-scrollable{
         --paper-dialog-scrollable:{
@@ -176,8 +175,7 @@
       }
 
       #skillDialog{
-        width: 80%;
-        min-width: 328px;
+        margin: 64px 0 16px 0;
         max-width: 888px;
       }
       .skill-class{
@@ -204,18 +202,43 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
-        padding-left: 2px;
+        padding-left: 6px;
         text-shadow:
           -1px -1px 1px #000,
            1px -1px 1px #000,
           -1px 1px 1px #000,
            1px 1px 1px #000;
       }
+
+      #sortDialog{
+        margin: 64px 0 16px 0;
+      }
+      .sort-option{
+        height: 32px;
+        width: 100%;
+        min-width: 80px;
+        cursor: pointer;
+        background-color: rgba(0,0,0,0.07);
+        border: 1px solid rgba(0,0,0,0.17);
+        padding: 4px 16px;
+        margin: 2px;
+        text-align: center;
+        opacity: 0.5;
+      }
+      .sort-option.iron-selected{
+        opacity: 1;
+        background-color: rgba(0,0,0,0.07);
+        border: 1px solid rgba(0,0,0,0.37);
+      }
+      .sort-name{
+        margin-left: 16px;
+      }
     </style>
 
       <div class="header layout horizontal center">
         <div style="width: 112px; flex: 0 1 auto;">
-          <paper-icon-button icon="filter-list" on-tap="openFilterDialog"></paper-icon-button>
+          <paper-icon-button icon="filter-list" on-tap="openFilterDialog" title="Filter Items"></paper-icon-button>
+          <paper-icon-button icon="sort" on-tap="openSortDialog" title="Sort Items"></paper-icon-button>
         </div>
         <div style="max-width: 220px; text-align: left;">
           <paper-input label="Search" value="{{query}}" style="height: 97px; max-width: 180px;">
@@ -233,12 +256,12 @@
           <div class="item layout horizontal center">
             <div style="width: 32px; height: 32px; margin-left: 4px;">
               <template is="dom-if" if="{{isChest(item.source)}}">
-                <iron-image src="{{assetUrl(item.source,'chest')}}" sizing="contain" alt="{{item.source}}" title="{{item.source}}" preload fade></iron-image>
+                <iron-image src="{{assetUrl(item.source,'chest')}}" class="wh32" sizing="contain" alt="{{item.source}}" title="{{item.source}}" preload fade></iron-image>
                 <!--<paper-tooltip position="top" offset="2">{{item.source}}</paper-tooltip>-->
               </template>
             </div>
             <div class="class-div">
-              <iron-image src="{{assetUrl(item.class,'type')}}" sizing="contain" alt="{{item.class}}" title="{{item.class}}" preload fade></iron-image>
+              <iron-image src="{{assetUrl(item.class,'type')}}" class="wh32" sizing="contain" alt="{{item.class}}" title="{{item.class}}" preload fade></iron-image>
               <!--<paper-tooltip position="top" offset="2">{{item.class}}</paper-tooltip>-->
             </div>
             <div class="level">{{item.level}}</div>
@@ -248,11 +271,35 @@
             </a>
             <div class="price">{{formatNumber(item.gold)}}</div>
             <div style="width: 108px; text-align: right;">{{formatNumber(item.exp)}} <span class="small">EXP</span></div>
-            <div class="power">{{formatNumber(item.power)}}</div>
+
+            <div class="layout horizontal center" style="width: 104px; text-align: right;" hidden$="{{!isEqual(sort,'exp-gold')}}"> 
+              <div class="flex field">{{expPerGold(item)}}</div>
+              <span class="w24 small">EXP</span>
+              <div>/</div>
+              <iron-image class="wh24" sizing="contain" src="http://sh-api.sols9.com/images/icon/gold.png"></iron-image>
+            </div>
+
+            
             <div class="time">{{formatCraftTime(user.skills.*, item.skills)}}</div>
+
+            <div class="layout horizontal center" style="width: 144px; text-align: right;" hidden$="{{!isEqual(sort,'gold-time')}}"> 
+              <div class="flex field">{{goldPerSec(item, user.skills.*)}}</div>
+              <iron-image class="wh24" sizing="contain" src="http://sh-api.sols9.com/images/icon/gold.png"></iron-image>
+              <div>/</div>
+              <span class="w24 small">SEC</span>
+            </div>
+            <div class="layout horizontal center" style="width: 144px; text-align: right;" hidden$="{{!isEqual(sort,'exp-time')}}"> 
+              <div class="flex field">{{expPerSec(item, user.skills.*)}}</div>
+              <span class="w24 small">EXP</span>
+              <div>/</div>
+              <span class="w24 small">SEC</span>
+            </div>
+
             <div style="width: 120px;">
               <sh-componentfor craft="{{item}}" class="layout horizontal center"></sh-componentfor>
             </div>
+
+            <div class="power">{{formatNumber(item.power)}}</div>
             <div style="width: 108px;">
               <template is="dom-if" if="{{isSkill(item)}}">
                 <div class="mskill" tquality$="{{item.mquality}}" title="{{item.mskill}} @ {{item.mquality}}">{{item.mskill}}</div>
@@ -340,9 +387,64 @@
         </div>
       </paper-dialog>
 
-      <paper-dialog id="skillDialog">
-        <h2>Enter your skills to get the correct crafting time</h2>
+      <paper-dialog id="sortDialog">
+        <h2>Sort Items by</h2>
         <paper-dialog-scrollable>
+          
+          <iron-selector attr-for-selected="name" selected="{{sort}}" class="layout vertical center">
+            <div name="none" class="layout horizontal center sort-option">
+              <iron-icon icon="block" class="wh32"></iron-icon>
+              <div class="sort-name">No sorting</div>
+            </div>
+            <div name="level" class="layout horizontal center sort-option">
+              <iron-image class="wh32" sizing="contain" src="http://sh-api.sols9.com/images/icon/level_blue.png"></iron-image>
+              <div class="sort-name">Level</div>
+            </div>
+            <div name="gold" class="layout horizontal center sort-option">
+              <iron-image class="wh32" sizing="contain" src="http://sh-api.sols9.com/images/icon/gold.png"></iron-image>
+              <div class="sort-name">Gold</div>
+            </div>
+            <div name="power" class="layout horizontal center sort-option">
+              <iron-image class="wh32" sizing="contain" src="http://sh-api.sols9.com/images/icon/power.png"></iron-image>
+              <div class="sort-name">Power</div>
+            </div>
+            <div name="exp" class="layout horizontal center sort-option">
+              <div class="wh32 layout horizontal center" style="text-align: center;">EXP</div>
+              <div class="sort-name">Experience</div>
+            </div>
+            <div name="time" class="layout horizontal center sort-option">
+              <iron-image class="wh32" sizing="contain" src="http://sh-api.sols9.com/images/icon/time.png"></iron-image>
+              <div class="sort-name">Crafting Time</div>
+            </div>
+            <div name="gold-time" class="layout horizontal center sort-option">
+              <iron-image class="wh32" sizing="contain" src="http://sh-api.sols9.com/images/icon/gold.png"></iron-image>
+              <div style="margin: 0 4px; font-size: 28px;">/</div>
+              <iron-image class="wh32" sizing="contain" src="http://sh-api.sols9.com/images/icon/time.png"></iron-image>
+              <div class="sort-name">Gold per Second</div>
+            </div>
+            <div name="exp-time" class="layout horizontal center sort-option">
+              <div class="wh32 layout horizontal center" style="text-align: center;">EXP</div>
+              <div style="margin: 0 4px; font-size: 28px;">/</div>
+              <iron-image class="wh32" sizing="contain" src="http://sh-api.sols9.com/images/icon/time.png"></iron-image>
+              <div class="sort-name">Experience per Second</div>
+            </div>
+            <div name="exp-gold" class="layout horizontal center sort-option">
+              <div class="wh32 layout horizontal center" style="text-align: center;">EXP</div>
+              <div style="margin: 0 4px; font-size: 28px;">/</div>
+              <iron-image class="wh32" sizing="contain" src="http://sh-api.sols9.com/images/icon/gold.png"></iron-image>
+              <div class="sort-name">Experience per Gold</div>
+            </div>
+          </iron-selector>
+        </paper-dialog-scrollable>
+        <div class="buttons">
+          <paper-button dialog-confirm autofocus on-tap="_filterChanged">OK</paper-button>
+        </div>
+      </paper-dialog>
+      
+      <paper-dialog id="skillDialog">
+        <h2>Crafting Skills</h2>
+        <paper-dialog-scrollable>
+          <div>Enter your skills to get the correct crafting time</div>
           <div class="layout horizontal wrap">
           <template is="dom-repeat" items="{{user.skills}}">
             <div name="{{item}}" class="skill-class layout vertical">
@@ -434,6 +536,10 @@
           value: function() {
             return ['Common','Good','Great','Flawless'];
           }
+        },
+        sort: {
+          type: String,
+          value: 'none'
         }
       },
       observers: [
@@ -451,7 +557,7 @@
         //console.log('_filterChanged', this.items.length, this.$.list._physicalCount);
       },
       filterItems: function(){
-        return this.crafts.filter(function (item) {
+        var filtered =  this.crafts.filter(function (item) {
           if(item.level < this.minlv) return false;
           if(item.level > this.maxlv) return false;
           if(this.classes!=undefined && this.classes.indexOf(item.class)==-1) return false;
@@ -475,12 +581,39 @@
           }
           return true;
         }.bind(this));
+
+        if(this.sort!='none'){
+          filtered = filtered.sort(function(a,b){
+            if(this.sort=='level'){
+              return a.level-b.level;
+            }else if(this.sort=='gold'){
+              return b.gold-a.gold;
+            }else if(this.sort=='exp'){
+              return b.exp-a.exp;
+            }else if(this.sort=='power'){
+              return b.power-a.power;
+            }else if(this.sort=='time'){
+              return this.getCraftTime({},a.skills)-this.getCraftTime({},b.skills);
+            }else if(this.sort=='gold-time'){
+              return b.gold/this.getCraftTime({},b.skills)-a.gold/this.getCraftTime({},a.skills);
+            }else if(this.sort=='exp-time'){
+              return b.exp/this.getCraftTime({},b.skills)-a.exp/this.getCraftTime({},a.skills);
+            }else if(this.sort=='exp-gold'){
+              return b.exp/b.gold-a.exp/a.gold;
+            }
+          }.bind(this));
+        }
+
+        return filtered;
       },
       clearQuery: function(){
         this.set('query', "");
       },
       openFilterDialog: function(){
         this.$.filterDialog.open();
+      },
+      openSortDialog: function(){
+        this.$.sortDialog.open();
       },
       setClassesAll: function(){
         this.set('classes', this.allclasses);
@@ -601,6 +734,15 @@
         var t = this.getCraftTime(item,setting);
         return this.formatTime(t);
       },
+      expPerGold: function(i){
+        return Math.round(i.exp/i.gold*1000)/1000;
+      },
+      goldPerSec: function(i){
+        return (Math.round(i.gold/this.getCraftTime({},i.skills)*10)/10).toFixed(1);
+      },
+      expPerSec: function(i){
+        return (Math.round(i.exp/this.getCraftTime({},i.skills)*10)/10).toFixed(1);
+      },
       isEmpty: function(a){
         return a.length==0;
       },
@@ -609,6 +751,9 @@
       },
       isSkill: function(i){
         return 'mskill' in i;
+      },
+      isEqual: function(a,b){
+        return a==b;
       }
     });
   </script>

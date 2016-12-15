@@ -155,12 +155,23 @@
         font-size: 22px;
         height: 14px;
       }
+
+      .goldf-name{
+        font-weight: bold;
+        width: 88px;
+      }
+      .goldf-value{
+        width: 40px;
+        text-align: right;
+      }
     </style>
     
     <app-route
         route="[[route]]"
         pattern="/:id"
         data="{{routeData}}"></app-route>
+
+    <app-localstorage-document key="sell-factors" data="{{factors}}"></app-localstorage-document>
 
     <div class="card content" style="position: relative;">
       <a href="/items" class="nolink back"><paper-icon-button icon="arrow-back"></paper-icon-button></a>
@@ -296,11 +307,30 @@
       </div>
 
       <h2 class="paper-font-title">Quality Table</h2>
+      <div class="layout horizontal center">
+        <div class="goldf-name">Mastery</div>
+        <paper-toggle-button id="masteryBtn" noink checked="{{factors.mastery}}"></paper-toggle-button>
+        <div class="paper-font-caption goldf-value" id="masteryGold" tquality="Common">+25%</div>
+        <iron-image class="wh24" src="http://sh-api.sols9.com/images/icon/gold.png" sizing="contain" preload fade></iron-image>
+      </div>
+      <div class="layout horizontal center">
+        <div class="goldf-name">Surcharge</div>
+        <paper-toggle-button noink checked="{{factors.surcharge}}"></paper-toggle-button>
+        <div class="paper-font-caption goldf-value" tquality="Common">+25%</div>
+        <iron-image class="wh24" src="http://sh-api.sols9.com/images/icon/gold.png" sizing="contain" preload fade></iron-image>
+      </div>
+      <div class="layout horizontal center">
+        <div class="goldf-name">Impatient</div>
+        <paper-toggle-button noink checked="{{factors.impatient}}"></paper-toggle-button>
+        <div class="paper-font-caption goldf-value" tquality="Common">+100%</div>
+        <iron-image class="wh24" src="http://sh-api.sols9.com/images/icon/gold.png" sizing="contain" preload fade></iron-image>
+      </div>
+      
       <template is="dom-repeat" items="{{qualities}}" as="qr">
         <div class="layout horizontal center wrap border3" style="font-weight: bold; padding: 4px 8px;">
           <div tquality$="{{qr.name}}" style="width: 80px;">{{qr.name}}</div>
           <div class="power">{{formatNumber(item.power, qr.power)}}</div>
-          <div class="price">{{formatNumber(item.gold, qr.price)}}</div>
+          <div class="price">{{formatPrice(item.gold, qr.price, factors.*)}}</div>
           <div style="width: 128px; text-align: right;">{{formatNumber(item.exp, qr.price)}} <span class="small">EXP</span></div>
         </div>
       </template>
@@ -327,6 +357,16 @@
               {name: "Mythical", price: 25, power: 5}
             ];
           }
+        },
+        factors: {
+          type: Object,
+          value: function(){
+            return {
+              mastery: true,
+              surcharge: false,
+              impatient: false
+            }
+          }
         }
       },
       observers: [
@@ -342,6 +382,8 @@
 
         for(var i in this.crafts){
           if(this.crafts[i].name == id){
+            this.$.masteryGold.innerHTML = '-&nbsp;';
+            
             this.set('item', this.crafts[i]);
             this.$.itemImg.src = "http://sh-api.sols9.com/images/craft/"+this.item.name+".png";
             this.$.itemClass.src = "http://sh-api.sols9.com/images/itemclass/"+this.item.class+".png";
@@ -353,6 +395,21 @@
       },
       formatNumber: function(n, m){
         return Math.round(n*m).toLocaleString();
+      },
+      formatPrice: function(n, m, f){
+        var p = n*m;
+        if(this.factors.mastery){
+          for(var i in this.item.progression){
+            if(this.item.progression[i].type=='gold'){
+              p*=this.item.progression[i].value;
+              break;
+            }
+          }
+        }
+        if(this.factors.surcharge) p*=1.25;
+        if(this.factors.impatient) p*=2;
+
+        return Math.round(p).toLocaleString();
       },
       isChest: function(c){
         return c.match(/ Chest\b/i);
@@ -428,8 +485,13 @@
       formatMasteryValue: function(p){
         if(p.type=='time') return '-25%';
         if(p.type=='gold'){
-          if(p.value==1.5) return '+50%';
-          else return '+25%';
+          if(p.value==1.5){
+            this.$.masteryGold.innerHTML = '+50%';
+            return '+50%';
+          } else {
+            this.$.masteryGold.innerHTML = '+25%';
+            return '+25%';
+          }
         }
         if(p.type=='unlock') return '';
         return -p.qty;

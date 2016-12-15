@@ -148,6 +148,13 @@
         z-index: 1;
         color: rgba(0,0,0,0.37);
       }
+
+      .progression-qty{
+        position: relative;
+        top: -18px;
+        font-size: 22px;
+        height: 14px;
+      }
     </style>
     
     <app-route
@@ -262,12 +269,31 @@
       </template>
 
       <h2 class="paper-font-title">Progression</h2>
-      <template is="dom-repeat" items="{{item.progression}}" as="progression">
-        <div class="layout horizontal center border3" style="padding: 4px 12px;">
-          <div class="paper-font-caption">Level {{formatProgressionLevel(index)}}: &nbsp;</div>
-          <div>{{progression}}</div>
-        </div>
-      </template>
+      <div class="layout horizontal wrap">
+        <template is="dom-repeat" items="{{item.progression}}" as="progression">
+          <div class="layout vertical center border3" style="padding: 4px 8px; ">
+            <div class="paper-font-caption">Level {{formatProgressionLevel(index)}}</div>
+            <div style="font-weight: bold; font-size: 14px;">{{formatProgressionName(progression)}}</div>
+            <template is="dom-if" if="{{isNormalProgression(progression)}}">
+              <iron-image class="wh64" src="{{formatMasteryUrl(progression)}}" sizing="contain" preload fade></iron-image>
+              <div class="progression-qty" tquality="Common">{{formatMasteryValue(progression)}}</div>
+            </template>
+            <template is="dom-if" if="{{isEqual(progression.type, 'skill')}}">
+              <div class="wh64 layout horizontal center center-justified" tquality="Common" style="line-height: 1; text-align: center;">{{progression.value}}</div>
+              <div class="progression-qty" tquality$="{{progression.quality}}" style="font-size: 12px; top: -8px;">{{progression.quality}}</div>
+            </template>
+            <template is="dom-if" if="{{isEqual(progression.type, 'quality')}}">
+              <div class="wh64 layout horizontal center center-justified" tquality$="{{progression.value}}">{{progression.value}}</div>
+            </template>
+            <template is="dom-if" if="{{isEqual(progression.type, 'unlock')}}">
+              <a href="/craft/{{progression.value}}">
+                <iron-image class="wh64" src="{{formatMasteryUrl(progression)}}" sizing="contain" preload fade></iron-image>
+              </a>
+            </template>
+            
+          </div>
+        </template>
+      </div>
 
       <h2 class="paper-font-title">Quality Table</h2>
       <template is="dom-repeat" items="{{qualities}}" as="qr">
@@ -391,6 +417,41 @@
         }
         return "N/A";
       },
+      formatProgressionName: function(p){
+        if(p.type=='time') return 'Time';
+        if(p.type=='gold') return 'Price';
+        if(p.type=='unlock') return 'Blueprint';
+        if(p.type=='skill') return 'Skill';
+        if(p.type=='quality') return 'Quality';
+        return 'Efficiency';
+      },
+      formatMasteryValue: function(p){
+        if(p.type=='time') return '-25%';
+        if(p.type=='gold'){
+          if(p.value==1.5) return '+50%';
+          else return '+25%';
+        }
+        if(p.type=='unlock') return '';
+        return -p.qty;
+      },
+      formatMasteryUrl: function(p){
+        if(p.type=='time') return 'http://sh-api.sols9.com/images/icon/time.png';
+        if(p.type=='gold') return 'http://sh-api.sols9.com/images/icon/gold.png';
+        if(p.type=='resource') 
+          return 'http://sh-api.sols9.com/images/resource/'+
+          ['Iron','Wood','Leather','Herb','Steel','Hardwood','Fabric','Oil','Mana','Jewels'][p.value]+'.png';
+        
+        if(p.type=='artifact') return 'http://sh-api.sols9.com/images/resources_icon/'+p.value+'.png';
+        if(p.type=='precraft') return 'http://sh-api.sols9.com/images/craft_icon/'+p.value+'.png';
+        if(p.type=='unlock') return 'http://sh-api.sols9.com/images/craft_icon/'+p.value+'.png';
+        return 'http://sh-api.sols9.com/images/craft_icon/'+p.value+'.png';
+      },
+      isNormalProgression: function(p){
+        return ['unlock','skill','quality'].indexOf(p.type) < 0;
+      },
+      isEqual: function(a,b){
+        return a==b;
+      }
     });
   </script>
 </dom-module>

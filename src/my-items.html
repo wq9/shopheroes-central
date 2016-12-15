@@ -595,9 +595,19 @@
             }else if(this.sort=='time'){
               return this.getCraftTime({},a.skills)-this.getCraftTime({},b.skills);
             }else if(this.sort=='gold-time'){
-              return b.gold/this.getCraftTime({},b.skills)-a.gold/this.getCraftTime({},a.skills);
+              var bt = this.getCraftTime({},b.skills);
+              var at = this.getCraftTime({},a.skills);
+              if(bt==0 && at==0) return 0;
+              if(bt==0) return -1;
+              if(at==0) return 1;
+              return b.gold/bt-a.gold/at;
             }else if(this.sort=='exp-time'){
-              return b.exp/this.getCraftTime({},b.skills)-a.exp/this.getCraftTime({},a.skills);
+              var bt = this.getCraftTime({},b.skills);
+              var at = this.getCraftTime({},a.skills);
+              if(bt==0 && at==0) return 0;
+              if(bt==0) return -1;
+              if(at==0) return 1;
+              return b.exp/bt-a.exp/at;
             }else if(this.sort=='exp-gold'){
               return b.exp/b.gold-a.exp/a.gold;
             }
@@ -738,10 +748,14 @@
         return Math.round(i.exp/i.gold*1000)/1000;
       },
       goldPerSec: function(i){
-        return (Math.round(i.gold/this.getCraftTime({},i.skills)*10)/10).toFixed(1);
+        var t = this.getCraftTime({},i.skills);
+        if(t==0) return '-';
+        return (Math.round(i.gold/t*10)/10).toFixed(1);
       },
       expPerSec: function(i){
-        return (Math.round(i.exp/this.getCraftTime({},i.skills)*10)/10).toFixed(1);
+        var t = this.getCraftTime({},i.skills);
+        if(t==0) return '-';
+        return (Math.round(i.exp/t*10)/10).toFixed(1);
       },
       isEmpty: function(a){
         return a.length==0;

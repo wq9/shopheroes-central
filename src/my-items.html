@@ -160,6 +160,21 @@
         opacity: 1;
       }
 
+      .item-precraft{
+        cursor: pointer;
+        background-color: rgba(0,0,0,0.07);
+        border: 1px solid rgba(0,0,0,0.17);
+        padding: 4px;
+        margin: 2px;
+        border-radius: 3px;
+        width: 64px;
+        text-align: center;
+        opacity: 0.37;
+      }
+      .item-precraft.iron-selected{
+        opacity: 1;
+      }
+
       #skillDialog{
         width: 80%;
         min-width: 328px;
@@ -302,6 +317,18 @@
 
           <div class="filter-line">
             <div>
+              <span class="subheader">Precrafts</span>
+            </div>
+            <p>Include items that have precrafts of the following qualities: </p>
+            <iron-selector attr-for-selected="name" multi selected-values="{{precrafts}}" class="layout horizontal wrap">
+              <template is="dom-repeat" items='["Common", "Good", "Great", "Flawless"]'>
+                <div name="{{item}}" class="item-precraft" tquality$="{{item}}">{{item}}</div>
+              </template>
+            </iron-selector>
+          </div>
+
+          <div class="filter-line">
+            <div>
               <span class="subheader">Mastery Skill</span>
             </div>
             <p>To filter by skill, type the name of the skill (Energetic) into the item search box at the top left of the item table.</p>
@@ -401,6 +428,12 @@
               'Spooky Shop Pack','Summer Sports Pack','Cinco De Mayo Pack','Back To School Pack','Hollow Pack','Patriot Pack',
             ];
           }
+        },
+        precrafts: {
+          type: Array,
+          value: function() {
+            return ['Common','Good','Great','Flawless'];
+          }
         }
       },
       observers: [
@@ -423,6 +456,11 @@
           if(item.level > this.maxlv) return false;
           if(this.classes!=undefined && this.classes.indexOf(item.class)==-1) return false;
           if(this.chests!=undefined && this.chests.indexOf(item.source)==-1) return false;
+          if(this.precrafts.length!=4){
+            for(var i in item.precrafts){
+              if(this.precrafts.indexOf(item.precrafts[i].quality) == -1) return false;
+            }
+          }
 
           if(this.query.length>2){
             var re = new RegExp(this.query, 'i');

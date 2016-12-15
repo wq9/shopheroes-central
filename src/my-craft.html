@@ -193,8 +193,8 @@
         <template is="dom-if" if="{{isUnlock(item)}}">
           <div class="obtain border3">
             <div>Craft <b>{{item.unlock.qty}}</b></div>
-            <a href="/craft/{{item.unlock.id}}">
-              <iron-image class="img64" src="http://sh-api.sols9.com/images/craft/{{item.unlock.id}}.png" sizing="contain" alt="{{item.unlock.item}}" preload fade></iron-image>
+            <a href="/craft/{{item.unlock.item}}">
+              <iron-image class="img64" src="http://sh-api.sols9.com/images/craft/{{item.unlock.item}}.png" sizing="contain" alt="{{item.unlock.item}}" preload fade></iron-image>
             </a>
             <paper-tooltip position="top" offset="2">Craft <b>{{item.unlock.qty}} {{item.unlock.item}}</b></paper-tooltip>
           </div>
@@ -248,13 +248,13 @@
           <div class="layout horizontal center paper-font-caption border3 precraft">
             <div class="layout vertical center">
               <div class="ellipsis">{{precraft.qty}} {{precraft.quality}}</div>
-              <iron-image class="img64" src="http://sh-api.sols9.com/images/item_icon/{{item.id}}.png" sizing="contain" alt="{{precraft.qty}} {{precraft.quality}} {{item.name}}" preload fade></iron-image>
+              <iron-image class="img64" src="http://sh-api.sols9.com/images/item_icon/{{item.name}}.png" sizing="contain" alt="{{precraft.qty}} {{precraft.quality}} {{item.name}}" preload fade></iron-image>
             </div>
             <div style="width: 40px;"><iron-icon icon="arrow-forward"></iron-icon></div>
-            <a href="/craft/{{precraft.id}}" class="nolink">
+            <a href="/craft/{{precraft.name}}" class="nolink">
               <div class="layout vertical center">
                 <div class="ellipsis">{{precraft.name}}</div>
-                <iron-image class="img64" src="http://sh-api.sols9.com/images/item_icon/{{precraft.id}}.png" sizing="contain" alt="{{precraft.name}}" preload fade></iron-image>
+                <iron-image class="img64" src="http://sh-api.sols9.com/images/item_icon/{{precraft.name}}.png" sizing="contain" alt="{{precraft.name}}" preload fade></iron-image>
               </div>
             </a>
           </div>
@@ -310,16 +310,15 @@
         //console.log(s);
         var id = this.routeData.id;
         if(this.crafts==undefined) return;
-        if(this.item!=undefined && this.item.id==id) return; //function get called twice?
+        if(this.item!=undefined && this.item.name==id) return; //function get called twice?
 
         //console.log('routeData.id', id);
 
         for(var i in this.crafts){
-          if(this.crafts[i].id == id){
+          if(this.crafts[i].name == id){
             this.set('item', this.crafts[i]);
-            this.$.itemImg.src = "http://sh-api.sols9.com/images/craft/"+this.item.id+".png";
+            this.$.itemImg.src = "http://sh-api.sols9.com/images/craft/"+this.item.name+".png";
             this.$.itemClass.src = "http://sh-api.sols9.com/images/itemclass/"+this.item.class+".png";
-
             //console.log(this.item);
             return; //break;
           }

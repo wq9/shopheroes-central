@@ -13,21 +13,10 @@
         line-height: 2;
         min-width: 48px;
         margin: 1px 4px;
-        background-position: 100% 50%;
-        background-size: contain;
-        background-repeat: no-repeat;
       }
 
       .qty{
-        color: white;
-        font-weight: bold;
-        text-align: left;
         padding-left: 4px;
-        text-shadow:
-          -1px -1px 1px #000,
-           1px -1px 1px #000,
-          -1px 1px 1px #000,
-           1px 1px 1px #000;
       }
 
       .nolink:hover{
@@ -36,10 +25,13 @@
     </style>
 
     <template is="dom-repeat" items="{{precrafts}}">
-        <a class="nolink" href="/craft/{{item.id}}" title="{{formatName(item)}}"><div class="ressource" style$="{{getStyle(item.id)}}">
-          <div class="qty" style="{{getColor(item)}}">{{item.qty}}</div>
-          <!--<paper-tooltip position="top" offset="2">{{formatName(item)}}</paper-tooltip>-->
-        </div></a>
+        <a class="nolink" href="/craft/{{item.name}}" title="{{formatName(item)}}">
+          <div class="layout horizontal ressource">
+            <div class="qty" tquality$="{{item.quality}}">{{item.qty}}</div>
+            <iron-image class="wh32" src="http://sh-api.sols9.com/images/item_icon/{{item.name}}.png" sizing="contain" alt="{{item.name}}" preload fade></iron-image>
+            <!--<paper-tooltip position="top" offset="2">{{formatName(item)}}</paper-tooltip>-->
+          </div>
+        </a>
     </template>
   </template>
 
@@ -53,20 +45,6 @@
       },
       getStyle: function(i){
         return "background-image: url('http://sh-api.sols9.com/images/item_icon/"+i+".png');";
-      },
-      getColor: function(i){
-        switch (i.quality) {
-          case "Common":
-            return "color: white;";
-          case "Good":
-            return "color: #30DA61;";
-          case "Great":
-            return "color: #3F69F6;";
-          case "Flawless":
-            return "color: #3CCAF3;";
-          default:
-            return "color: white;";
-        }
       },
       formatName: function(i){
         var n = i.qty;

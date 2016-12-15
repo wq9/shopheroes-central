@@ -20,6 +20,9 @@
       .item>div{
         flex: 0 0 auto;
       }
+      .item iron-image{
+        background-color: white;
+      }
 
       .header{
         flex: 0 0 auto;
@@ -265,8 +268,8 @@
               <!--<paper-tooltip position="top" offset="2">{{item.class}}</paper-tooltip>-->
             </div>
             <div class="level">{{item.level}}</div>
-            <a href="/craft/{{item.id}}" class="nolink layout horizontal center">
-              <div class="image" style="{{getImageStyle(item)}}"></div>
+            <a href="/craft/{{item.name}}" class="nolink layout horizontal center">
+              <iron-image class="image" src="http://sh-api.sols9.com/images/item_icon/{{item.name}}.png" sizing="contain" alt="{{item.name}}" preload fade></iron-image>
               <div style="width: 180px;">{{item.name}}</div>
             </a>
             <div class="price">{{formatNumber(item.gold)}}</div>

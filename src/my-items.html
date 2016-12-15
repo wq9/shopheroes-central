@@ -269,7 +269,7 @@
             </div>
             <div class="level">{{item.level}}</div>
             <a href="/craft/{{item.name}}" class="nolink layout horizontal center">
-              <iron-image class="image" src="http://sh-api.sols9.com/images/item_icon/{{item.name}}.png" sizing="contain" alt="{{item.name}}" preload fade></iron-image>
+              <iron-image class="image" src="http://sh-api.sols9.com/images/craft_icon/{{item.name}}.png" sizing="contain" alt="{{item.name}}" preload fade></iron-image>
               <div style="width: 180px;">{{item.name}}</div>
             </a>
             <div class="price">{{formatNumber(item.gold)}}</div>
@@ -701,7 +701,7 @@
         }
       },
       getImageStyle: function(i){
-        return "background-image: url('http://sh-api.sols9.com/images/item_icon/"+i.id+".png');";
+        return "background-image: url('http://sh-api.sols9.com/images/craft_icon/"+i.id+".png');";
       },
       formatNumber: function(n){
         return n.toLocaleString();

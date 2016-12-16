@@ -748,7 +748,7 @@
         return this.formatTime(t);
       },
       expPerGold: function(i){
-        return Math.round(i.exp/i.gold*1000)/1000;
+        return (Math.round(i.exp/i.gold*1000)/1000).toFixed(3);
       },
       goldPerSec: function(i){
         var t = this.getCraftTime({},i.skills);

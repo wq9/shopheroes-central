@@ -1,0 +1,64 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="sh-procs">
+  <template>
+    <style include="shared-styles iron-flex iron-flex-alignment">
+      :host {
+        display: block;
+      }
+    </style>
+    {{formatted}}
+  </template>
+
+  <script>
+    Polymer({
+      is: 'sh-procs',
+      properties: {
+        formatted: {
+          type: String,
+          value: '-'
+        }
+      },
+      observers: [
+        'formatValue(mastered, mastery, quality)'
+      ],
+      formatValue: function(mastered, mastery, quality){
+        var f = (this.calcValue(mastered, mastery, quality)*100);
+        if(f<10) f ='0'+f.toFixed(2);
+        else f = f.toFixed(2);
+        this.set('formatted', f+'%');
+        //return ;
+      },
+      calcValue: function(mastered, mastery, quality){
+        var v = 1;
+        switch (quality) {
+          case "Common":
+            v = 1;
+            v -= this.calcValue(mastered, mastery, 'Good');
+            v -= this.calcValue(mastered, mastery, 'Great');
+            v -= this.calcValue(mastered, mastery, 'Flawless');
+            v -= this.calcValue(mastered, mastery, 'Epic');
+            v -= this.calcValue(mastered, mastery, 'Legendary');
+            if(v<0) v=0;
+            break;
+          case "Good":
+            v = 0.025+0.00025*mastery; break;
+          case "Great":
+            v = 0.01+0.000125*mastery; break;
+          case "Flawless":
+            v = 0.0025+0.00005*mastery; break;
+          case "Epic":
+            v = 0.0001+0.000005*mastery; break;
+          case "Legendary":
+            v = 0.00001+0.0000005*mastery; break;
+          default:
+            v = 0; break;
+        }
+        if(mastered) v*=1.25;
+        if(v>1) v=1;
+        return v;
+      }
+    });
+  </script>
+</dom-module>

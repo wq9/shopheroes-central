@@ -452,7 +452,7 @@
           <template is="dom-repeat" items="{{user.skills}}">
             <div name="{{item}}" class="skill-class layout vertical">
               <iron-image src="http://sh-api.sols9.com/images/skill/{{item.name}}.png" sizing="contain" alt="{{item.name}}"></iron-image>
-              <paper-input label="" allowed-pattern="[0-9]" value="{{item.value}}"></paper-input>
+              <paper-input label="" allowed-pattern="[0-9]" value="{{item.value}}" type="number"></paper-input>
               <paper-tooltip position="top" offset="2">{{item.name}}</paper-tooltip>
             </div>
           </template>

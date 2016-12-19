@@ -164,6 +164,11 @@
         width: 40px;
         text-align: right;
       }
+
+      .procs-chance{
+        font-weight: bold;
+        width: 48px;
+      }
     </style>
     
     <app-route
@@ -244,7 +249,7 @@
             <div class="skillValue">{{getSkillValue(index, item.skills.*)}}</div>
             <div style="padding: 0 8px;">&divide;</div>
             <div style="height: 40px; width: 48px; text-align: center;">
-              <paper-input label="" no-label-float allowed-pattern="[0-9]" value="{{skill.value}}"></paper-input>
+              <paper-input label="" no-label-float allowed-pattern="[0-9]" value="{{skill.value}}" type="number"></paper-input>
             </div>
             <div style="padding: 0 8px;">=</div>
             <div>{{getSkillMinute(index, skill.value, item.skills.*)}}</div>
@@ -307,31 +312,45 @@
       </div>
 
       <h2 class="paper-font-title">Quality Table</h2>
-      <div class="layout horizontal center">
-        <div class="goldf-name">Mastery</div>
-        <paper-toggle-button id="masteryBtn" noink checked="{{factors.mastery}}"></paper-toggle-button>
-        <div class="paper-font-caption goldf-value" id="masteryGold" tquality="Common">+25%</div>
-        <iron-image class="wh24" src="http://sh-api.sols9.com/images/icon/gold.png" sizing="contain" preload fade></iron-image>
-      </div>
-      <div class="layout horizontal center">
-        <div class="goldf-name">Surcharge</div>
-        <paper-toggle-button noink checked="{{factors.surcharge}}"></paper-toggle-button>
-        <div class="paper-font-caption goldf-value" tquality="Common">+25%</div>
-        <iron-image class="wh24" src="http://sh-api.sols9.com/images/icon/gold.png" sizing="contain" preload fade></iron-image>
-      </div>
-      <div class="layout horizontal center">
-        <div class="goldf-name">Impatient</div>
-        <paper-toggle-button noink checked="{{factors.impatient}}"></paper-toggle-button>
-        <div class="paper-font-caption goldf-value" tquality="Common">+100%</div>
-        <iron-image class="wh24" src="http://sh-api.sols9.com/images/icon/gold.png" sizing="contain" preload fade></iron-image>
-      </div>
       
+      <div class="layout horizontal center wrap">
+        <div>
+          <div class="layout horizontal center">
+            <div class="goldf-name">Mastered</div>
+            <paper-toggle-button id="masteryBtn" noink checked="{{factors.mastery}}"></paper-toggle-button>
+            <div class="paper-font-caption goldf-value" id="masteryGold" tquality="Common">+25%</div>
+            <iron-image class="wh24" src="http://sh-api.sols9.com/images/icon/gold.png" sizing="contain" preload fade></iron-image>
+          </div>
+          <div class="layout horizontal center">
+            <div class="goldf-name">Surcharge</div>
+            <paper-toggle-button noink checked="{{factors.surcharge}}"></paper-toggle-button>
+            <div class="paper-font-caption goldf-value" tquality="Common">+25%</div>
+            <iron-image class="wh24" src="http://sh-api.sols9.com/images/icon/gold.png" sizing="contain" preload fade></iron-image>
+          </div>
+          <div class="layout horizontal center">
+            <div class="goldf-name">Impatient</div>
+            <paper-toggle-button noink checked="{{factors.impatient}}"></paper-toggle-button>
+            <div class="paper-font-caption goldf-value" tquality="Common">+100%</div>
+            <iron-image class="wh24" src="http://sh-api.sols9.com/images/icon/gold.png" sizing="contain" preload fade></iron-image>
+          </div>
+        </div>
+        <div class="layout horizontal center" style="margin: 0 auto;">
+          <iron-image class="wh48" src="http://sh-api.sols9.com/images/skill/Mastery.png" sizing="contain" preload fade></iron-image>
+          <paper-input id="masteryInput" label="Mastery Points" allowed-pattern="[0-9]" value="[[user.skills.11.value]]" on-input="masteryChange" type="number" style="width: 84px; text-align: center;"></paper-input>
+        </div>
+      </div>
+
       <template is="dom-repeat" items="{{qualities}}" as="qr">
-        <div class="layout horizontal center wrap border3" style="font-weight: bold; padding: 4px 8px;">
-          <div tquality$="{{qr.name}}" style="width: 80px;">{{qr.name}}</div>
-          <div class="power">{{formatNumber(item.power, qr.power)}}</div>
-          <div class="price">{{formatPrice(item.gold, qr.price, factors.*)}}</div>
-          <div style="width: 128px; text-align: right;">{{formatNumber(item.exp, qr.price)}} <span class="small">EXP</span></div>
+        <div class="layout horizontal center border3" style="font-weight: bold; padding: 4px 8px;">
+          <div>
+            <div tquality$="{{qr.name}}" style="width: 80px; padding: 2px;">{{qr.name}}</div>
+            <sh-procs class="paper-font-caption procs-chance" mastered="{{factors.mastery}}" mastery="{{arrayItem(user.skills.*, 11, 'value')}}" quality="{{qr.name}}"></sh-procs>
+          </div>
+          <div class="layout horizontal wrap end-justified">
+            <div class="power">{{formatNumber(item.power, qr.power)}}</div>
+            <div class="price">{{formatPrice(item.gold, qr.price, factors.*)}}</div>
+            <div style="width: 128px; text-align: right;">{{formatNumber(item.exp, qr.price)}} <span class="small">EXP</span></div>
+          </div>
         </div>
       </template>
 
@@ -513,6 +532,13 @@
       },
       isEqual: function(a,b){
         return a==b;
+      },
+      arrayItem: function(change, index, path) {
+        //console.log('arrayItem', change);
+        return this.get(path, change.base[index]);
+      },
+      masteryChange: function(e, d){
+        this.set('user.skills.11.value', this.$.masteryInput.value);
       }
     });
   </script>

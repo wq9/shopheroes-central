@@ -40,7 +40,6 @@
             v -= this.calcValue(mastered, mastery, 'Flawless');
             v -= this.calcValue(mastered, mastery, 'Epic');
             v -= this.calcValue(mastered, mastery, 'Legendary');
-            if(v<0) v=0;
             break;
           case "Good":
             v = 0.025+0.00025*mastery; break;
@@ -56,7 +55,32 @@
             v = 0; break;
         }
         if(mastered) v*=1.25;
-        if(v>1) v=1;
+
+        if(quality=='Good' && v>0.58){
+          var sum = 0;
+          sum += this.calcValue(mastered, mastery, 'Great');
+          sum += this.calcValue(mastered, mastery, 'Flawless');
+          sum += this.calcValue(mastered, mastery, 'Epic');
+          sum += this.calcValue(mastered, mastery, 'Legendary');
+          if(sum+v > 1) v = 1 - sum;
+        }
+
+        if(quality=='Great' && v>0.69){
+          var sum = 0;
+          sum += this.calcValue(mastered, mastery, 'Flawless');
+          sum += this.calcValue(mastered, mastery, 'Epic');
+          sum += this.calcValue(mastered, mastery, 'Legendary');
+          if(sum+v > 1) v = 1 - sum;
+        }
+
+        if(quality=='Flawless' && v>0.90){
+          var sum = 0;
+          sum += this.calcValue(mastered, mastery, 'Epic');
+          sum += this.calcValue(mastered, mastery, 'Legendary');
+          if(sum+v > 1) v = 1 - sum;
+        }
+
+        if(v<0) v=0;
         return v;
       }
     });

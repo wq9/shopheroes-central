@@ -215,11 +215,11 @@
 
         <template is="dom-if" if="{{isUnlock(item)}}">
           <div class="obtain border3">
-            <div>Craft <b>{{item.unlock.qty}}</b></div>
-            <a href="/craft/{{item.unlock.item}}">
-              <iron-image class="img64" src="http://sh-api.sols9.com/images/craft/{{item.unlock.item}}.png" sizing="contain" alt="{{item.unlock.item}}" preload fade></iron-image>
+            <div>Craft<!-- <b>{{item.unlock.qty}}</b>--></div>
+            <a href="/craft/{{item.unlock.name}}">
+              <iron-image class="img64" src="http://sh-api.sols9.com/images/craft/{{item.unlock.name}}.png" sizing="contain" alt="{{item.unlock.name}}" preload fade></iron-image>
             </a>
-            <paper-tooltip position="top" offset="2">Craft <b>{{item.unlock.qty}} {{item.unlock.item}}</b></paper-tooltip>
+            <paper-tooltip position="top" offset="2">Craft <!--<b>{{item.unlock.qty}}--> {{item.unlock.name}}</b></paper-tooltip>
           </div>
         </template>
 

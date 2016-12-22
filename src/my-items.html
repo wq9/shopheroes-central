@@ -329,7 +329,7 @@
         <paper-dialog-scrollable>
           <div class="filter-line" style="border-top: 1px solid rgba(0,0,0,0.07)">
             <div class="subheader" style="margin: 8px 0 26px 0;">Item Level</div>
-            <paper-range-slider always-show-pin pin step='1' min='1' max='50' 
+            <paper-range-slider always-show-pin pin step='1' min='1' max='60' 
             value-min='{{minlv}}' value-max='{{maxlv}}' style="width: 100%;"></paper-range-slider>
           </div>
 
@@ -452,7 +452,7 @@
           <template is="dom-repeat" items="{{user.skills}}">
             <div name="{{item}}" class="skill-class layout vertical">
               <iron-image src="http://sh-api.sols9.com/images/skill/{{item.name}}.png" sizing="contain" alt="{{item.name}}"></iron-image>
-              <paper-input label="" allowed-pattern="[0-9]" value="{{item.value}}" type="number"></paper-input>
+              <paper-input label="" allowed-pattern="[0-9]" value="{{item.value}}"></paper-input>
               <paper-tooltip position="top" offset="2">{{item.name}}</paper-tooltip>
             </div>
           </template>
@@ -480,11 +480,11 @@
         },
         maxlv: {
           type: Number,
-          value: 50
+          value: 55
         },
         minlv: {
           type: Number,
-          value: 0
+          value: 1
         },
         classes: {
           type: Array,

@@ -146,12 +146,12 @@
       }
 
       .item-chest{
-        width: 64px; height: 64px;
+        width: 88px; height: 88px;
         background-color: rgba(0,0,0,0.17);
         border: 1px solid rgba(0,0,0,0.17);
         cursor: pointer;
         opacity: 0.37;
-        margin: 2px;
+        margin: 1px;
         border-radius: 3px;
         text-align: center;
       }
@@ -259,7 +259,7 @@
           <div class="item layout horizontal center">
             <div style="width: 32px; height: 32px; margin-left: 4px;">
               <template is="dom-if" if="{{isChest(item.source)}}">
-                <iron-image src="{{assetUrl(item.source,'chest')}}" class="wh32" sizing="contain" alt="{{item.source}}" title="{{item.source}}" preload fade></iron-image>
+                <iron-image src="http://sh-api.sols9.com/images/packs/{{item.source}}.png" class="wh32" sizing="contain" alt="{{item.source}}" title="{{item.source}}" preload fade></iron-image>
                 <!--<paper-tooltip position="top" offset="2">{{item.source}}</paper-tooltip>-->
               </template>
             </div>
@@ -343,7 +343,7 @@
               <template is="dom-repeat" items="{{allclasses}}">
                 <div name="{{item}}" class="item-class" style$="{{classStyle(item)}}" on-tap="classTap">
                   <img src="{{assetUrl(item,'type')}}" alt="{{item}}">
-                  <paper-tooltip position="top" offset="2">{{item}}</paper-tooltip>
+                  <paper-tooltip position="top" offset="2" animation-delay="0">{{item}}</paper-tooltip>
                 </div>
               </template>
             </iron-selector>
@@ -358,8 +358,8 @@
             <iron-selector attr-for-selected="name" multi selected-values="{{chests}}" class="layout horizontal wrap">
               <template is="dom-repeat" items="{{allchests}}">
                 <div name="{{item}}" class="item-chest" style$="{{chestStyle(item)}}" on-tap="chestTap">
-                  <iron-image src="{{assetUrl(item,'chest')}}" sizing="contain" alt="{{item}}" preload fade></iron-image>
-                  <paper-tooltip position="top" offset="2">{{item}}</paper-tooltip>
+                  <iron-image src="http://sh-api.sols9.com/images/packs/{{item}}.png" sizing="contain" alt="{{item}}" preload fade></iron-image>
+                  <paper-tooltip position="top" offset="2" animation-delay="0">{{item}}</paper-tooltip>
                 </div>
               </template>
             </iron-selector>
@@ -386,7 +386,7 @@
 
         </paper-dialog-scrollable>
         <div class="buttons">
-          <paper-button dialog-confirm autofocus on-tap="_filterChanged">OK</paper-button>
+          <paper-button dialog-confirm autofocus on-tap="filterChanged">OK</paper-button>
         </div>
       </paper-dialog>
 
@@ -440,7 +440,7 @@
           </iron-selector>
         </paper-dialog-scrollable>
         <div class="buttons">
-          <paper-button dialog-confirm autofocus on-tap="_filterChanged">OK</paper-button>
+          <paper-button dialog-confirm autofocus on-tap="filterChanged">OK</paper-button>
         </div>
       </paper-dialog>
       
@@ -453,13 +453,13 @@
             <div name="{{item}}" class="skill-class layout vertical">
               <iron-image src="http://sh-api.sols9.com/images/skill/{{item.name}}.png" sizing="contain" alt="{{item.name}}"></iron-image>
               <paper-input label="" allowed-pattern="[0-9]" value="{{item.value}}"></paper-input>
-              <paper-tooltip position="top" offset="2">{{item.name}}</paper-tooltip>
+              <paper-tooltip position="top" offset="2" animation-delay="0">{{item.name}}</paper-tooltip>
             </div>
           </template>
           </div>
         </paper-dialog-scrollable>
         <div class="buttons">
-          <paper-button dialog-confirm autofocus on-tap="_filterChanged">OK</paper-button>
+          <paper-button dialog-confirm autofocus on-tap="filterChanged">OK</paper-button>
         </div>
       </paper-dialog>
   </template>
@@ -476,7 +476,7 @@
         search: {
           type: String,
           value: "",
-          observer: "_filterChanged"
+          observer: "filterChanged"
         },
         maxlv: {
           type: Number,
@@ -510,27 +510,12 @@
             'Spells', 'Projectiles', 'Instruments'];
           }
         },
-        chests: {
-          type: Array,
-          value: function() {
-            return [
-              '---','Wooden Chest','Leather Chest','Iron Chest','Golden Chest','Magic Chest','Dwarvish Chest','Primal Chest','City Raid',
-              'Advanced Shopfare','Warrior Pack','Wizard Pack','Ninja Pack','Pack of all Trades','Heroic Pack','Epic Pack',
-              'Christmas Pack','Winter Pack','Easter Pack','Fall Pack','Farmer Pack','Halloween Pack',
-              'Harvest Pack','Holiday Pack','Thanksgiving Pack','Valentine\'s Pack',
-              'Spooky Shop Pack','Summer Sports Pack','Cinco De Mayo Pack','Back To School Pack','Hollow Pack','Patriot Pack',
-            ];
-          }
-        },
         allchests: {
           type: Array,
           value: function() {
             return [
               '---','Wooden Chest','Leather Chest','Iron Chest','Golden Chest','Magic Chest','Dwarvish Chest','Primal Chest','City Raid',
               'Advanced Shopfare','Warrior Pack','Wizard Pack','Ninja Pack','Pack of all Trades','Heroic Pack','Epic Pack',
-              'Christmas Pack','Winter Pack','Easter Pack','Fall Pack','Farmer Pack','Halloween Pack',
-              'Harvest Pack','Holiday Pack','Thanksgiving Pack','Valentine\'s Pack',
-              'Spooky Shop Pack','Summer Sports Pack','Cinco De Mayo Pack','Back To School Pack','Hollow Pack','Patriot Pack',
             ];
           }
         },
@@ -546,18 +531,34 @@
         }
       },
       observers: [
-        '_filterChanged(crafts.splices)'
+        'itemsLoaded(crafts.splices)'
       ],
+      ready: function(){
+
+      },
       _queryChanged: function(){
         this.debounce('queryChanged', function() {
           this.set('search', this.query.trim());
         }, 300);
       },
-      _filterChanged: function(){
+      itemsLoaded: function(){
+        for(var i in this.crafts){
+          if(this.allchests.indexOf(this.crafts[i].source) == -1 ){
+            this.push('allchests', this.crafts[i].source);
+            //this.push('chests', this.crafts[i].source);
+          }
+        }
+        //this.set('allchests', this.allchests);
+        this.set('chests', this.allchests);
+
+        //console.log(this.allchests);
+        this.filterChanged();
+      },
+      filterChanged: function(){
         //console.log(this.crafts);
         if(this.crafts==undefined) return;
         this.set('items', this.filterItems());
-        //console.log('_filterChanged', this.items.length, this.$.list._physicalCount);
+        //console.log('filterChanged', this.items.length, this.$.list._physicalCount);
       },
       filterItems: function(){
         var filtered =  this.crafts.filter(function (item) {
@@ -694,14 +695,9 @@
         switch (t) {
           case "type":
             return "https://cdn.rawgit.com/ShopHeroesData/datahub-shopheroes/master/src/assets/ItemIcons/"+i+".png";
-          case "chest":
-            return "http://sols9.com/shopheroes/assets/chest/"+i+".png";
           default:
             return "";
         }
-      },
-      getImageStyle: function(i){
-        return "background-image: url('http://sh-api.sols9.com/images/craft_icon/"+i.id+".png');";
       },
       formatNumber: function(n){
         return n.toLocaleString();

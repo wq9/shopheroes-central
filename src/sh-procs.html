@@ -21,9 +21,9 @@
         }
       },
       observers: [
-        'formatValue(mastered, mastery, quality)'
+        'formatValue(mastered, mastery, quality, minQuality)'
       ],
-      formatValue: function(mastered, mastery, quality){
+      formatValue: function(mastered, mastery, quality, minQuality){
         var f = (this.calcValue(mastered, mastery, quality)*100);
         if(f<10) f ='0'+f.toFixed(2);
         else f = f.toFixed(2);
@@ -56,6 +56,7 @@
         }
         if(mastered) v*=1.25;
 
+        //overwrite base % when total exceed 100%
         if(quality=='Good' && v>0.58){
           var sum = 0;
           sum += this.calcValue(mastered, mastery, 'Great');
@@ -78,6 +79,30 @@
           sum += this.calcValue(mastered, mastery, 'Epic');
           sum += this.calcValue(mastered, mastery, 'Legendary');
           if(sum+v > 1) v = 1 - sum;
+        }
+
+        //overwrite quality from item mastery
+        if(mastered && this.minQuality=='Good'){
+          if(quality=='Common') v = 0;
+          if(quality=='Good'){
+            var sum = 0;
+            sum += this.calcValue(mastered, mastery, 'Great');
+            sum += this.calcValue(mastered, mastery, 'Flawless');
+            sum += this.calcValue(mastered, mastery, 'Epic');
+            sum += this.calcValue(mastered, mastery, 'Legendary');
+            v = 1 - sum;
+          }
+        }
+        if(mastered && this.minQuality=='Great'){
+          if(quality=='Common') v = 0;
+          if(quality=='Good') v = 0;
+          if(quality=='Great'){
+            var sum = 0;
+            sum += this.calcValue(mastered, mastery, 'Flawless');
+            sum += this.calcValue(mastered, mastery, 'Epic');
+            sum += this.calcValue(mastered, mastery, 'Legendary');
+            v = 1 - sum;
+          }
         }
 
         if(v<0) v=0;

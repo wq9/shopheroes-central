@@ -344,7 +344,7 @@
         <div class="layout horizontal center border3" style="font-weight: bold; padding: 4px 8px;">
           <div>
             <div tquality$="{{qr.name}}" style="width: 80px; padding: 2px;">{{qr.name}}</div>
-            <sh-procs class="paper-font-caption procs-chance" mastered="{{factors.mastery}}" mastery="{{arrayItem(user.skills.*, 11, 'value')}}" quality="{{qr.name}}"></sh-procs>
+            <sh-procs class="paper-font-caption procs-chance" mastered="{{factors.mastery}}" mastery="{{arrayItem(user.skills.*, 11, 'value')}}" quality="{{qr.name}}" min-quality="{{minQuality(item.*)}}"></sh-procs>
           </div>
           <div class="layout horizontal wrap end-justified">
             <div class="power">{{formatNumber(item.power, qr.power)}}</div>
@@ -529,6 +529,13 @@
       },
       isNormalProgression: function(p){
         return ['unlock','skill','quality'].indexOf(p.type) < 0;
+      },
+      minQuality: function(it){
+        var mq = 'Common';
+        for(var i in this.item.progression){
+          if(this.item.progression[i].type=='quality') mq=this.item.progression[i].value;
+        }
+        return mq;
       },
       isEqual: function(a,b){
         return a==b;

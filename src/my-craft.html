@@ -287,26 +287,28 @@
       <h2 class="paper-font-title">Progression</h2>
       <div class="layout horizontal wrap">
         <template is="dom-repeat" items="{{item.progression}}" as="progression">
-          <div class="layout vertical center border3" style="padding: 4px 8px; ">
-            <div class="paper-font-caption">Level {{formatProgressionLevel(index)}}</div>
-            <div style="font-weight: bold; font-size: 14px;">{{formatProgressionName(progression)}}</div>
-            <template is="dom-if" if="{{isNormalProgression(progression)}}">
-              <iron-image class="wh64" src="{{formatMasteryUrl(progression)}}" sizing="contain" preload fade></iron-image>
-              <div class="progression-qty" tquality="Common">{{formatMasteryValue(progression)}}</div>
-            </template>
-            <template is="dom-if" if="{{isEqual(progression.type, 'skill')}}">
-              <div class="wh64 layout horizontal center center-justified" tquality="Common" style="line-height: 1; text-align: center;">{{progression.value}}</div>
-              <div class="progression-qty" tquality$="{{progression.quality}}" style="font-size: 12px; top: -8px;">{{progression.quality}}</div>
-            </template>
-            <template is="dom-if" if="{{isEqual(progression.type, 'quality')}}">
-              <div class="wh64 layout horizontal center center-justified" tquality$="{{progression.value}}">{{progression.value}}</div>
-            </template>
-            <template is="dom-if" if="{{isEqual(progression.type, 'unlock')}}">
-              <a href="/craft/{{progression.value}}">
+          <div class="layout vertical border3" style="padding: 4px 8px; text-align: center;">
+            <div class="flex">
+              <!--<div class="paper-font-caption">Level {{formatProgressionLevel(index)}}</div>-->
+              <div style="font-weight: bold; font-size: 14px;">{{formatProgressionName(progression)}}</div>
+              <template is="dom-if" if="{{isNormalProgression(progression)}}">
                 <iron-image class="wh64" src="{{formatMasteryUrl(progression)}}" sizing="contain" preload fade></iron-image>
-              </a>
-            </template>
-            
+                <div class="progression-qty" tquality="Common">{{formatMasteryValue(progression)}}</div>
+              </template>
+              <template is="dom-if" if="{{isEqual(progression.type, 'skill')}}">
+                <div class="wh64 layout horizontal center center-justified" tquality="Common" style="line-height: 1; text-align: center;">{{progression.value}}</div>
+                <div class="progression-qty" tquality$="{{progression.quality}}" style="font-size: 12px; top: -8px;">{{progression.quality}}</div>
+              </template>
+              <template is="dom-if" if="{{isEqual(progression.type, 'quality')}}">
+                <div class="wh64 layout horizontal center center-justified" tquality$="{{progression.value}}">{{progression.value}}</div>
+              </template>
+              <template is="dom-if" if="{{isEqual(progression.type, 'unlock')}}">
+                <a href="/craft/{{progression.value}}">
+                  <iron-image class="wh64" src="{{formatMasteryUrl(progression)}}" sizing="contain" preload fade></iron-image>
+                </a>
+              </template>
+            </div>
+            <div class="paper-font-caption" style="font-weight: bold; opacity: 0.57;">Craft {{progression.craft}}</div>
           </div>
         </template>
       </div>

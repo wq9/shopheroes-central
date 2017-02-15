@@ -54,7 +54,7 @@
           default:
             v = 0; break;
         }
-        if(mastered) v*=1.25;
+        if(mastered && quality!='Common') v*=1.25;
 
         //overwrite base % when total exceed 100%
         if(quality=='Good' && v>0.58){

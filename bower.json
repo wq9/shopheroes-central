@@ -12,8 +12,5 @@
     "app-elements": "PolymerElements/app-elements#^0.10.0",
     "polymer": "Polymer/polymer#^1.7.0",
     "paper-range-slider": "IftachSadeh/paper-range-slider#^0.2.4"
-  },
-  "devDependencies": {
-    "web-component-tester": "^4.0.0"
   }
 }

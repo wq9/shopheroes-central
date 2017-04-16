@@ -317,7 +317,7 @@
             <div class="power">{{formatNumber(item.power)}}</div>
             <div style="width: 108px;">
               <template is="dom-if" if="{{isSkill(item)}}">
-                <div class="mskill" tquality$="{{item.mquality}}" title="{{item.mskill}} @ {{item.mquality}}">{{item.mskill}}</div>
+                <div class="mskill" tquality$="{{item.progression.4.quality}}" title="{{item.progression.4.value}} @ {{item.progression.4.quality}}">{{item.progression.4.value}}</div>
                 <!--<paper-tooltip position="top" offset="2">{{item.mskill}} @ {{item.mquality}}</paper-tooltip>-->
               </template>
             </div>
@@ -587,11 +587,11 @@
           if(this.query.length>2){
             var re = new RegExp(this.query, 'i');
             if(re.test(item.name)) return true;
-            if('mskill' in item && re.test(item.mskill)) return true;
+            if(item.progression[4].type == 'skill' && re.test(item.progression[4].value)) return true;
 
-            var re2 = new RegExp('\\b'+this.query, 'i');
+            //var re2 = new RegExp('\\b'+this.query, 'i');
             //if(re2.test(item.source)) return true;
-            if('mskill' in item && re2.test(item.mskill)) return true;
+            //if('mskill' in item && re2.test(item.mskill)) return true;
 
             return false;
           }
@@ -775,7 +775,7 @@
         return s!="---";
       },
       isSkill: function(i){
-        return 'mskill' in i;
+        return i.progression[4].type == 'skill';
       },
       isEqual: function(a,b){
         return a==b;

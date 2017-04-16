@@ -527,7 +527,7 @@
           value: function() {
             return [
               '---','Wooden Chest','Leather Chest','Iron Chest','Golden Chest','Magic Chest','Dwarvish Chest','Primal Chest','City Raid',
-              'Advanced Shopfare','Warrior Pack','Wizard Pack','Ninja Pack','Pack of all Trades','Heroic Pack','Epic Pack',
+              'Wizard Pack','Warrior Pack','Ninja Pack','Advanced Shopfare','Pack of all Trades'
             ];
           }
         },
@@ -554,13 +554,20 @@
         }, 300);
       },
       itemsLoaded: function(){
+        var packs = [];
         for(var i in this.crafts){
           if(this.allchests.indexOf(this.crafts[i].source) == -1 ){
-            this.push('allchests', this.crafts[i].source);
-            //this.push('chests', this.crafts[i].source);
+            packs.push(this.crafts[i].source);
           }
         }
-        //this.set('allchests', this.allchests);
+        packs.sort(function(a, b) {
+          return a.localeCompare(b);
+        });
+
+        for(var i in packs){
+          if(this.allchests.indexOf(packs[i]) == -1 )
+            this.push('allchests', packs[i]);
+        } 
         this.set('chests', this.allchests);
 
         //console.log(this.allchests);

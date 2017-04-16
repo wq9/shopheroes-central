@@ -154,12 +154,24 @@
         margin: 1px;
         border-radius: 3px;
         text-align: center;
+        position: relative;
       }
       .item-chest>iron-image{
         height: 100%; width: 100%;
       }
       .item-chest.iron-selected{
         opacity: 1;
+      }
+
+      .item-chest-name{
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background-color: rgba(0,0,0,0.37);
+        min-height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
       .item-precraft{
@@ -359,7 +371,7 @@
               <template is="dom-repeat" items="{{allchests}}">
                 <div name="{{item}}" class="item-chest" style$="{{chestStyle(item)}}" on-tap="chestTap">
                   <iron-image src="http://sh-api.sols9.com/images/packs/{{item}}.png" sizing="contain" alt="{{item}}" preload fade></iron-image>
-                  <paper-tooltip position="top" offset="2" animation-delay="0">{{item}}</paper-tooltip>
+                  <div class="item-chest-name" tquality="Common">{{item}}</div>
                 </div>
               </template>
             </iron-selector>

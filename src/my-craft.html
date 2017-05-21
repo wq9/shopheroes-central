@@ -200,7 +200,7 @@
         <template is="dom-if" if="{{isChest(item.source)}}">
           <div class="obtain border3">
             <div>Found in</div>
-            <iron-image id="itemChest" src="http://sh-api.sols9.com/images/chest_icon/{{item.source}}.png" sizing="contain" alt="{{item.source}}" preload fade></iron-image>
+            <iron-image id="itemChest" src="https://sh-api.sols9.com/images/chest_icon/{{item.source}}.png" sizing="contain" alt="{{item.source}}" preload fade></iron-image>
             <paper-tooltip position="top" offset="2">{{item.source}}</paper-tooltip>
           </div>
         </template>
@@ -208,7 +208,7 @@
         <template is="dom-if" if="{{isPack(item.source)}}">
           <div class="obtain border3">
             <div>Obtained from</div>
-            <iron-image id="itemChest" src="http://sols9.com/shopheroes/assets/chest/{{item.source}}.png" sizing="contain" alt="{{item.source}}" preload fade></iron-image>
+            <iron-image id="itemChest" src="https://sh-api.sols9.com/images/packs/{{item.source}}.png" sizing="contain" alt="{{item.source}}" preload fade></iron-image>
             <paper-tooltip position="top" offset="2">{{item.source}}</paper-tooltip>
           </div>
         </template>
@@ -217,7 +217,7 @@
           <div class="obtain border3">
             <div>Craft <b>{{item.unlock.qty}}</b></div>
             <a href="/craft/{{item.unlock.name}}">
-              <iron-image class="img64" src="http://sh-api.sols9.com/images/craft/{{item.unlock.name}}.png" sizing="contain" alt="{{item.unlock.name}}" preload fade></iron-image>
+              <iron-image class="img64" src="https://sh-api.sols9.com/images/craft/{{item.unlock.name}}.png" sizing="contain" alt="{{item.unlock.name}}" preload fade></iron-image>
             </a>
             <paper-tooltip position="top" offset="2">Craft <b>{{item.unlock.qty}} {{item.unlock.name}}</b></paper-tooltip>
           </div>
@@ -226,7 +226,7 @@
         <template is="dom-if" if="{{isFragment(item)}}">
           <div class="obtain border3">
             <div>Exchange <b>{{item.fragments.qty}}</b></div>
-            <iron-image class="img64" src="http://sh-api.sols9.com/images/icon/fragment.png" sizing="contain" alt="{{item.unlock.item}}" preload fade></iron-image>
+            <iron-image class="img64" src="https://sh-api.sols9.com/images/icon/fragment.png" sizing="contain" alt="{{item.unlock.item}}" preload fade></iron-image>
             <paper-tooltip position="top" offset="2">Exchange <b>{{item.fragments.qty}} fragments</b> ({{getPath(item.fragments.path)}} path)</paper-tooltip>
           </div>
         </template>
@@ -245,7 +245,7 @@
       <template id="skillRepeat" is="dom-repeat" items="{{user.skills}}" as="skill">
         <template is="dom-if" if="{{!isSkillZero(index, item.skills.*)}}">
           <div class="layout horizontal center">
-            <iron-image class="img48" src="http://sh-api.sols9.com/images/skill/{{skill.name}}.png" sizing="contain" alt="{{skill.name}}" title="{{skill.name}}" preload fade></iron-image>
+            <iron-image class="img48" src="https://sh-api.sols9.com/images/skill/{{skill.name}}.png" sizing="contain" alt="{{skill.name}}" title="{{skill.name}}" preload fade></iron-image>
             <div class="skillValue">{{getSkillValue(index, item.skills.*)}}</div>
             <div style="padding: 0 8px;">&divide;</div>
             <div style="height: 40px; width: 48px; text-align: center;">
@@ -257,10 +257,10 @@
         </template>
       </template>
       <div class="layout horizontal center" style="margin: 12px 12px; font-weight: bold; position: relative;">
-        <iron-image class="img32" src="http://sh-api.sols9.com/images/icon/time.png" sizing="contain" alt="Craft Time" preload fade></iron-image>
+        <iron-image class="img32" src="https://sh-api.sols9.com/images/icon/time.png" sizing="contain" alt="Craft Time" preload fade></iron-image>
         <div class="timedecrease">-25%</div>
         <sh-crafttime user="{{user}}" item="{{item}}" multiplier="0.75" style="margin-right: 16px;"></sh-crafttime>
-        <iron-image class="img32" src="http://sh-api.sols9.com/images/icon/time.png" sizing="contain" alt="Craft Time" preload fade></iron-image>
+        <iron-image class="img32" src="https://sh-api.sols9.com/images/icon/time.png" sizing="contain" alt="Craft Time" preload fade></iron-image>
         <sh-crafttime user="{{user}}" item="{{item}}"></sh-crafttime>
       </div>
       
@@ -271,13 +271,13 @@
           <div class="layout horizontal center paper-font-caption border3 precraft">
             <div class="layout vertical center">
               <div class="ellipsis">{{precraft.qty}} {{precraft.quality}}</div>
-              <iron-image class="img64" src="http://sh-api.sols9.com/images/craft_icon/{{item.name}}.png" sizing="contain" alt="{{precraft.qty}} {{precraft.quality}} {{item.name}}" preload fade></iron-image>
+              <iron-image class="img64" src="https://sh-api.sols9.com/images/craft_icon/{{item.name}}.png" sizing="contain" alt="{{precraft.qty}} {{precraft.quality}} {{item.name}}" preload fade></iron-image>
             </div>
             <div style="width: 40px;"><iron-icon icon="arrow-forward"></iron-icon></div>
             <a href="/craft/{{precraft.name}}" class="nolink">
               <div class="layout vertical center">
                 <div class="ellipsis">{{precraft.name}}</div>
-                <iron-image class="img64" src="http://sh-api.sols9.com/images/craft_icon/{{precraft.name}}.png" sizing="contain" alt="{{precraft.name}}" preload fade></iron-image>
+                <iron-image class="img64" src="https://sh-api.sols9.com/images/craft_icon/{{precraft.name}}.png" sizing="contain" alt="{{precraft.name}}" preload fade></iron-image>
               </div>
             </a>
           </div>

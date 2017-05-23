@@ -7,8 +7,25 @@
       [hidden] { display: none !important; }
 
       :host {
-        --app-primary-color: #4285f4;
+        --app-primary-color: var(--paper-indigo-500);
         --app-secondary-color: black;
+
+        --paper-font-common-base: {
+            font-family: 'Montserrat', sans-serif;
+        };
+      }
+
+      paper-input{
+        --paper-input-container-input:{
+          font-family: 'Montserrat', sans-serif;
+        };
+      }
+      paper-dialog{
+          font-family: 'Montserrat', sans-serif;
+      }
+      paper-dialog h2{
+          font-family: 'Montserrat', sans-serif !important;
+          font-weight: bold !important;
       }
 
       paper-tabs{
@@ -32,6 +49,13 @@
       }
       paper-toggle-button{
         cursor: pointer;
+      }
+
+      a{
+        text-decoration: none;
+      }
+      a:hover{
+        text-decoration: underline;
       }
 
       .card {
@@ -104,29 +128,30 @@
       }
       .paper-font-display1 {
         @apply(--paper-font-display1);
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bold;
       }
       .paper-font-headline {
         @apply(--paper-font-headline);
       }
       .paper-font-title {
         @apply(--paper-font-title);
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bold;
       }
       .paper-font-body2 {
         @apply(--paper-font-body2);
       }
-
       .paper-font-body1 {
         @apply(--paper-font-body1);
       }
-
       .paper-font-caption {
         @apply(--paper-font-caption);
+        font-family: 'Montserrat', sans-serif;
       }
-
       .paper-font-menu {
         @apply(--paper-font-menu);
       }
-
       .paper-font-button {
         @apply(--paper-font-button);
       }

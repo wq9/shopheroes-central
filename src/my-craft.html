@@ -14,8 +14,11 @@
         color: rgba(0,0,0,0.87);
       }
 
-      .paper-font-title{
-        margin-top: 24px;
+      h2.paper-font-title{
+        border-top: 1px solid rgba(0,0,0,0.12);
+        margin: 24px -16px 8px;
+        padding: 12px 16px;
+        color: var(--paper-red-400);
       }
 
       iron-image{
@@ -157,17 +160,33 @@
       }
 
       .goldf-name{
-        font-weight: bold;
         width: 88px;
       }
       .goldf-value{
-        width: 40px;
+        width: 44px;
         text-align: right;
       }
 
       .procs-chance{
         font-weight: bold;
-        width: 48px;
+        width: 64px;
+      }
+
+      .wh64{
+        margin-bottom: 8px;
+      }
+
+      h1 {
+          margin: 12px 0;
+          color: white;
+          text-shadow: -1px -1px 1px #000, 1px -1px 1px #000, -1px 1px 1px #000, 1px 1px 1px #000;
+          margin-left: 4px;
+      }
+
+      .banner{
+        background-color: #3F51B5;
+        margin: 0 -16px 8px;
+        padding: 0 16px;
       }
     </style>
     
@@ -182,7 +201,7 @@
       <a href="/items" class="nolink back"><paper-icon-button icon="arrow-back"></paper-icon-button></a>
       <iron-image id="itemImg" sizing="contain" alt="{{item.name}}" preload fade></iron-image>
 
-      <div class="layout horizontal center">
+      <div class="layout horizontal center banner">
         <div class="level">{{item.level}}</div>
         <h1 class="paper-font-display1">{{item.name}}</h1>
         <paper-tooltip position="top" offset="2">Level {{item.level}} {{item.class}}</paper-tooltip>
@@ -248,7 +267,7 @@
             <iron-image class="img48" src="https://sh-api.sols9.com/images/skill/{{skill.name}}.png" sizing="contain" alt="{{skill.name}}" title="{{skill.name}}" preload fade></iron-image>
             <div class="skillValue">{{getSkillValue(index, item.skills.*)}}</div>
             <div style="padding: 0 8px;">&divide;</div>
-            <div style="height: 40px; width: 48px; text-align: center;">
+            <div style="height: 40px; width: 56px; text-align: center;">
               <paper-input label="" no-label-float allowed-pattern="[0-9]" value="{{skill.value}}" type="number"></paper-input>
             </div>
             <div style="padding: 0 8px;">=</div>

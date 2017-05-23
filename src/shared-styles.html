@@ -9,6 +9,7 @@
       :host {
         --app-primary-color: var(--paper-indigo-500);
         --app-secondary-color: black;
+        --app-background-color: var(--paper-grey-200);
 
         --paper-font-common-base: {
             font-family: 'Montserrat', sans-serif;
@@ -22,10 +23,14 @@
       }
       paper-dialog{
           font-family: 'Montserrat', sans-serif;
+          background-color: var(--app-background-color);
       }
       paper-dialog h2{
           font-family: 'Montserrat', sans-serif !important;
           font-weight: bold !important;
+      }
+      paper-button{
+        background-color: rgba(0,0,0,0.02);
       }
 
       paper-tabs{
@@ -62,7 +67,7 @@
         margin: 24px;
         padding: 16px;
         border-radius: 2px;
-        background-color: #fff;
+        background-color: var(--app-background-color);
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
       }
 

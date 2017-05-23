@@ -22,13 +22,13 @@
       }
 
       iron-image{
-        background-color: white;
+        background-color: var(--app-background-color);
       }
 
       #itemImg{
         width: 100%;
         height: 192px;
-        background-color: white;
+        background-color: var(--app-background-color);
       }
 
       #itemClass{
@@ -103,10 +103,15 @@
       }
 
       .border3{
-        border: 1px solid rgba(0,0,0,0.17);
+        border: 0px solid rgba(0,0,0,0.17);
         margin: 2px;
         padding: 2px;
         border-radius: 3px;
+        background-color: var(--paper-grey-300);
+      }
+
+      .border3 iron-image, .pill iron-image{
+        background-color: var(--paper-grey-300);
       }
 
       .obtain{
@@ -184,9 +189,16 @@
       }
 
       .banner{
-        background-color: #3F51B5;
+        background-color: var(--paper-indigo-500);
         margin: 0 -16px 8px;
         padding: 0 16px;
+      }
+
+      .pill{
+        background-color: var(--paper-grey-300);
+        border-radius: 16px;
+        padding: 4px 4px 4px 16px;
+        margin: 0 4px;
       }
     </style>
     
@@ -208,9 +220,15 @@
       </div>
       <div class="layout horizontal center wrap" style="font-weight: bold;">
         <iron-image id="itemClass" sizing="contain" alt="{{item.class}}" preload fade></iron-image>
-        <div class="power">{{formatNumber(item.power, 1)}}</div>
-        <div class="price">{{formatNumber(item.gold, 1)}}</div>
-        <div style="width: 116px; text-align: right;">{{formatNumber(item.exp, 1)}} <span class="small">EXP</span></div>
+        <div class="pill layout horizontal">
+            <div>{{formatNumber(item.power, 1)}}</div>
+            <iron-image class="wh24" src="http://sh-api.sols9.com/images/icon/power.png" sizing="contain" preload fade></iron-image>          
+        </div>
+        <div class="pill layout horizontal">
+            <div>{{formatNumber(item.gold, 1)}}</div>
+            <iron-image class="wh24" src="http://sh-api.sols9.com/images/icon/gold.png" sizing="contain" preload fade></iron-image>          
+        </div>
+        <div class="pill">{{formatNumber(item.exp, 1)}} <span class="small">EXP</span></div>
       </div>
 
 
@@ -293,7 +311,7 @@
               <iron-image class="img64" src="https://sh-api.sols9.com/images/craft_icon/{{item.name}}.png" sizing="contain" alt="{{precraft.qty}} {{precraft.quality}} {{item.name}}" preload fade></iron-image>
             </div>
             <div style="width: 40px;"><iron-icon icon="arrow-forward"></iron-icon></div>
-            <a href="/craft/{{precraft.name}}" class="nolink">
+            <a href="/craft/{{precraft.name}}" class="nolink" title="{{precraft.name}}">
               <div class="layout vertical center">
                 <div class="ellipsis">{{precraft.name}}</div>
                 <iron-image class="img64" src="https://sh-api.sols9.com/images/craft_icon/{{precraft.name}}.png" sizing="contain" alt="{{precraft.name}}" preload fade></iron-image>
@@ -322,7 +340,7 @@
                 <div class="wh64 layout horizontal center center-justified" tquality$="{{progression.value}}">{{progression.value}}</div>
               </template>
               <template is="dom-if" if="{{isEqual(progression.type, 'unlock')}}">
-                <a href="/craft/{{progression.value}}">
+                <a href="/craft/{{progression.value}}" title="{{progression.value}}">
                   <iron-image class="wh64" src="{{formatMasteryUrl(progression)}}" sizing="contain" preload fade></iron-image>
                 </a>
               </template>

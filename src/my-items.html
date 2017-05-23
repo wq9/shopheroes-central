@@ -67,7 +67,7 @@
 
       .image{
         width: 48px;
-        height: 40px;
+        height: 39px;
         background-position: 0% 50%;
         background-size: contain;
         background-repeat: no-repeat;
@@ -462,11 +462,13 @@
           <div>Enter your skills to get the correct crafting time</div>
           <div class="layout horizontal wrap">
           <template is="dom-repeat" items="{{user.skills}}">
+            <template is="dom-if" if="{{!isEqual(item.name, 'Mastery')}}">
             <div name="{{item}}" class="skill-class layout vertical">
               <iron-image src="http://sh-api.sols9.com/images/skill/{{item.name}}.png" sizing="contain" alt="{{item.name}}"></iron-image>
               <paper-input label="" allowed-pattern="[0-9]" value="{{item.value}}"></paper-input>
               <paper-tooltip position="top" offset="2" animation-delay="0">{{item.name}}</paper-tooltip>
             </div>
+            </template>
           </template>
           </div>
         </paper-dialog-scrollable>

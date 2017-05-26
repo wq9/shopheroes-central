@@ -44,7 +44,9 @@
             }
           }
         }
-        return Math.ceil(m*60*this.multiplier);
+        var s = Math.ceil(m*60*this.multiplier);
+        if(s<5) s=5;
+        return s;
       },
       formatTime: function(sec){
         sec = parseInt(sec, 10);

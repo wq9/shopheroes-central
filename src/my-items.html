@@ -734,7 +734,9 @@
             }
           }
         }
-        return Math.ceil(m*60);
+        var s = Math.ceil(m*60);
+        if(s<5) s=5;
+        return s;
       },
       formatTime: function(sec){
         sec = parseInt(sec, 10);

@@ -11,24 +11,24 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh './jenkins/build.sh'
+                sh 'bash ./jenkins/build.sh'
             }
         }
         stage('Test') {
             steps {
-                sh './jenkins/test.sh'
+                sh 'bash ./jenkins/test.sh'
             }
         }
         stage('Deliver') {
             steps {
-                sh './jenkins/deliver.sh'
+                sh 'bash ./jenkins/deliver.sh'
                 input message: 'Finished using the web site? (Click "Proceed" to continue)'
-                sh './jenkins/kill.sh'
+                sh 'bash ./jenkins/kill.sh'
             }
         }
         stage('Deploy - Production') {
             steps {
-                sh './jenkins/deploy.sh'
+                sh 'bash ./jenkins/deploy.sh'
             }
         }
     }

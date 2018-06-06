@@ -1,6 +1,5 @@
 #!/usr/bin/env sh
 
-apt-get -y install git
 git --version
 npm install -g bower polymer-cli@0.18.4
 bower install --config.interactive=false --allow-root

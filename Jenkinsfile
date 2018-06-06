@@ -15,6 +15,9 @@ pipeline {
             }
         }
         stage('Test') {
+            agent {
+                docker { image 'selenium:standalone-chrome' }
+            }
             steps {
                 sh './jenkins/test.sh'
             }

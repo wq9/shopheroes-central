@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-PATH="/bin:/usr/sbin:/usr/local/bin:/usr/bin"
+apt-get -y install git
 git --version
-npm install -g bower@1.8.2 polymer-cli@0.18.4
-bower install --allow-root
+npm install -g bower polymer-cli@0.18.4
+bower install --config.interactive=false --allow-root
 polymer build

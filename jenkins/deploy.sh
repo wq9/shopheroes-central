@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-scp -r build/default $SHUSER@$SHHOST:/var/www/$SHFOLDER
+#scp -r build/default $SHUSER@$SHHOST:/var/www/$SHFOLDER
